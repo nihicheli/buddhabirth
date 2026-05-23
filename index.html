@@ -269,8 +269,10 @@
       margin: 32px -28px 0;
       min-height: 150px;
       padding: 24px 34px;
-      display: grid;
-      place-items: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
       border-top: 3px double var(--line);
       border-bottom: 3px double var(--line);
       color: rgba(255,255,255,.72);
@@ -295,6 +297,14 @@
 
     textarea::placeholder,
     input::placeholder { color: rgba(255,255,255,.38); }
+
+    .char-counter {
+      align-self: flex-end;
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 8px;
+      user-select: none;
+    }
 
     .quote {
       position: relative;
@@ -720,6 +730,70 @@
       box-shadow: 0 0 28px rgba(255,255,255,.07);
     }
 
+    .share-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      width: 100%;
+      margin-top: 8px;
+    }
+
+    .share-actions .pill {
+      width: 100%;
+      min-height: 44px;
+      border-radius: 999px;
+      font-weight: 700;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: background-color 150ms ease, opacity 150ms ease;
+    }
+
+    .share-actions .pill.primary {
+      background: #f3f2ed;
+      color: #050505;
+      border-color: #f3f2ed;
+    }
+
+    .share-actions .pill.primary:hover {
+      background: rgba(243, 242, 237, 0.9);
+    }
+
+    .share-actions .pill.secondary {
+      background: rgba(255,255,255,.1);
+      color: #f3f2ed;
+      border: 1px solid rgba(255,255,255,.2);
+    }
+
+    .share-actions .pill.secondary:hover {
+      background: rgba(255,255,255,.15);
+    }
+
+    /* 토스트 메시지 스타일 */
+    .toast {
+      position: absolute;
+      bottom: 120px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: rgba(243, 242, 237, 0.95);
+      color: #111;
+      padding: 10px 22px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: bold;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+      z-index: 9999;
+      opacity: 0;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
     .progress {
       position: absolute;
       right: 18px;
@@ -826,7 +900,6 @@
     <section class="scene" data-scene="lantern-start" data-flow="lantern">
       <div class="copy">
         <h1 class="title">당신의 소원을<br>연등에 담겠습니다.</h1>
-        <!-- "지금 5개의 연등이 켜졌습니다."가 서브타이틀 위치에 굵게(bold) 결합되어 렌더링됩니다 -->
         <p class="subtitle" id="lanternCount">지금 <strong>0개</strong>의 연등이 켜졌습니다.<br>연등은 좌우로 넘겨 둘러볼 수 있습니다.</p>
       </div>
       <div class="lantern-scroll list-lit endless two-line"><div class="lantern-strip" id="lanternStrip"></div></div>
@@ -843,7 +916,8 @@
         <h1 class="title">어떤 소원을<br>밝히시겠습니까.</h1>
       </div>
       <label class="panel">
-        <textarea id="wishInput" rows="3" placeholder="가족이 평안하기를 바랍니다."></textarea>
+        <textarea id="wishInput" rows="3" placeholder="가족이 평안하기를 바랍니다." maxlength="50"></textarea>
+        <div class="char-counter" id="wishCounter">0/50자</div>
       </label>
       <div class="bottom-nav">
         <button class="nav-button" type="button" data-next="lantern-start">이전</button>
@@ -856,7 +930,8 @@
         <h1 class="title">이름을 작성하시면<br>연등을 띄워드리겠습니다.</h1>
       </div>
       <label class="panel">
-        <input id="visitor" type="text" placeholder="김불자" autocomplete="name">
+        <input id="visitor" type="text" placeholder="김불자" autocomplete="name" maxlength="10">
+        <div class="char-counter" id="visitorCounter">0/10자</div>
       </label>
       <div class="bottom-nav">
         <button class="nav-button" type="button" data-next="lantern-wish">이전</button>
@@ -903,7 +978,7 @@
       <div class="meme-stage" id="memeStage">
         <img class="meme-buddha" src="assets/buddha-front-original.png" alt="">
         <img class="bubble" src="assets/insight-bubble.png" alt="">
-        <textarea class="bubble-text" id="insightInput" rows="3" placeholder="깨달음을 입력하세요"></textarea>
+        <textarea class="bubble-text" id="insightInput" rows="3" placeholder="깨달음을 입력하세요" maxlength="40"></textarea>
       </div>
       <div class="bottom-nav">
         <button class="nav-button" type="button" data-next="menu">이전</button>
@@ -919,14 +994,21 @@
       </div>
     </dialog>
 
+    <!-- 수정된 공유하기 모달 레이아웃 -->
     <dialog id="shareDialog">
       <div class="modal-body">
-        <h2>공유 준비 완료</h2>
+        <h2 id="shareDialogTitle">마음 공유하기</h2>
         <img class="share-preview" id="sharePreview" alt="공유 이미지 미리보기">
-        <p id="shareText">링크와 이미지 캡처 기준이 준비되었습니다.</p>
-        <button class="pill" type="button" id="closeShare">닫기</button>
+        <div class="share-actions">
+          <button class="pill primary" type="button" id="downloadImage">사진 저장</button>
+          <button class="pill secondary" type="button" id="copyShareLink">링크 공유</button>
+        </div>
+        <button class="nav-button" type="button" id="closeShare" style="margin-top: 6px; display: inline-block;">닫기</button>
       </div>
     </dialog>
+
+    <!-- 백그라운드 토스트 알림창 -->
+    <div class="toast" id="toast" aria-hidden="true">링크가 복사되었습니다.</div>
 
     <div class="ash" aria-hidden="true"></div>
     <div class="progress" aria-hidden="true"></div>
@@ -953,6 +1035,8 @@
     const dharmaSource = document.querySelector("#dharmaSource");
     const wishInput = document.querySelector("#wishInput");
     const visitor = document.querySelector("#visitor");
+    const wishCounter = document.querySelector("#wishCounter");
+    const visitorCounter = document.querySelector("#visitorCounter");
     const lanternStrip = document.querySelector("#lanternStrip");
     const skyStrip = document.querySelector("#skyStrip");
     const lanternCount = document.querySelector("#lanternCount");
@@ -961,8 +1045,10 @@
     const wishName = document.querySelector("#wishName");
     const wishText = document.querySelector("#wishText");
     const shareDialog = document.querySelector("#shareDialog");
-    const shareText = document.querySelector("#shareText");
     const sharePreview = document.querySelector("#sharePreview");
+    const shareDialogTitle = document.querySelector("#shareDialogTitle");
+    const toast = document.querySelector("#toast");
+    
     let current = "intro";
     let introFace = "side";
     let currentQuote = { quote: "마음이 흔들릴 때에는 붙잡지 말고 흔들림을 바라보십시오.", source: "법구경" };
@@ -995,6 +1081,15 @@
       meditation: ["menu", "meditation-start"],
       meme: ["menu", "meme-start"]
     };
+
+    // 실시간 글자수 카운터 이벤트 리스너 추가
+    wishInput.addEventListener("input", () => {
+      wishCounter.textContent = `${wishInput.value.length}/50자`;
+    });
+
+    visitor.addEventListener("input", () => {
+      visitorCounter.textContent = `${visitor.value.length}/10자`;
+    });
 
     async function loadQuotes() {
       if (Array.isArray(window.BUDDHIST_QUOTES) && window.BUDDHIST_QUOTES.length) {
@@ -1042,7 +1137,14 @@
           phone.classList.add("ignited");
         }, 5600);
       }
-      if (name === "lantern-wish") setTimeout(() => wishInput.focus(), 250);
+      if (name === "lantern-wish") {
+        wishCounter.textContent = `${wishInput.value.length}/50자`;
+        setTimeout(() => wishInput.focus(), 250);
+      }
+      if (name === "lantern-name") {
+        visitorCounter.textContent = `${visitor.value.length}/10자`;
+        setTimeout(() => visitor.focus(), 250);
+      }
       if (name === "meme-start") setTimeout(() => document.querySelector("#insightInput").focus(), 250);
     }
 
@@ -1069,7 +1171,6 @@
 
     function updateLanternCount() {
       const count = wishes.length;
-      // innerHTML을 사용해 N개 부분을 <strong> 태그로 감싸 굵게 표현하고, "연등은 좌우로 넘겨 둘러볼 수 있습니다" 문구를 하단에 결합합니다.
       lanternCount.innerHTML = `지금 <strong>${count.toLocaleString("ko-KR")}개</strong>의 연등이 켜졌습니다.<br>연등은 좌우로 넘겨 둘러볼 수 있습니다.`;
     }
 
@@ -1229,27 +1330,83 @@
         ctx.shadowColor = "rgba(0,0,0,.35)";
         ctx.shadowBlur = 0;
         ctx.shadowOffsetY = 4;
-        drawWrappedText(ctx, document.querySelector("#insightInput").value.trim() || "얻은 깨달음을 입력하세", 450, 522, 570, 68, 4);
+        drawWrappedText(ctx, document.querySelector("#insightInput").value.trim() || "얻은 깨달음을 입력하세요", 450, 522, 570, 68, 4);
         ctx.shadowOffsetY = 0;
       }
 
+      // 캔버스 하단 출처 링크를 메인 대표 도메인 주소로 통일
       ctx.fillStyle = "rgba(255,255,255,.42)";
       ctx.font = "24px Noto Sans KR, sans-serif";
-      ctx.fillText(location.href.split("#")[0], 450, 1518);
+      ctx.fillText("https://nihicheli.github.io/buddhabirth/", 450, 1518);
       return canvas.toDataURL("image/png");
     }
 
+    // 우아한 토스트 메시지 띄우기 함수
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2500);
+    }
+
     async function share(kind) {
-      const url = location.href;
-      const lines = {
-        dharma: `오늘의 한 말씀 이미지와 링크가 준비되었습니다.\n${url}#dharma`,
-        lantern: `내 연등을 클릭한 장면의 이미지와 링크가 준비되었습니다.\n${url}#lantern`,
-        meme: `깨달음 이미지와 링크가 준비되었습니다.\n${url}#meme`
+      const titles = {
+        dharma: "오늘의 한 말씀 공유",
+        lantern: "나의 연등 공유",
+        meme: "깨달음 공유"
       };
-      shareText.textContent = lines[kind];
+      shareDialogTitle.textContent = titles[kind] || "마음 공유하기";
       sharePreview.removeAttribute("src");
       shareDialog.showModal();
       sharePreview.src = await makeSharePreview(kind);
+    }
+
+    // 로컬 이미지 다운로드 기능 구현
+    document.querySelector("#downloadImage").addEventListener("click", () => {
+      const dataUrl = sharePreview.src;
+      if (!dataUrl) return;
+      const link = document.createElement("a");
+      link.href = dataUrl;
+      link.download = `번뇌금지_${Date.now()}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+
+    // 대표 도메인 주소로 SNS 공유 및 복사 기능 구현
+    document.querySelector("#copyShareLink").addEventListener("click", async () => {
+      const SHARE_URL = "https://nihicheli.github.io/buddhabirth/";
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: '번뇌금지',
+            text: '부처님오신날 번뇌금지에서 번뇌를 내려놓고 소원과 깨달음을 나누어보세요.',
+            url: SHARE_URL
+          });
+        } catch (err) {
+          if (err.name !== "AbortError") {
+            copyToClipboard(SHARE_URL);
+          }
+        }
+      } else {
+        copyToClipboard(SHARE_URL);
+      }
+    });
+
+    // 클립보드 복사 폴백 (IFrame 호환을 위한 document.execCommand)
+    function copyToClipboard(val) {
+      const tempInput = document.createElement("input");
+      tempInput.value = val;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      try {
+        document.execCommand("copy");
+        showToast("공유 링크가 복사되었습니다.");
+      } catch (err) {
+        showToast("링크 복사 실패. 다시 시도해 주세요.");
+      }
+      document.body.removeChild(tempInput);
     }
 
     function startLoop(type) {
