@@ -704,19 +704,27 @@
       text-shadow: 0 2px 0 rgba(0,0,0,.25);
     }
 
+    /* [개선] 캡처 환경(html2canvas) 및 디스플레이 전반에서 소원 다이얼로그가 정확히 중앙에 오도록 절대 배치를 고정하고, 겹침 비침을 원천 차단하기 위해 100% 완전 불투명한 전통 먹색 단일 배경을 부여합니다. */
     dialog {
-      width: min(330px, calc(100vw - 44px));
-      border: 1px solid rgba(255,255,255,.18);
-      background: rgba(5,5,5,.93);
+      position: absolute !important;
+      top: 50% !important;
+      left: 50% !important;
+      transform: translate(-50%, -50%) !important;
+      margin: 0 !important;
+      width: min(320px, calc(100vw - 56px));
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      background: #0e0e0d !important; /* 투명도 0%의 완전 불투명 깊은 먹색 배경 */
       color: var(--ink);
       padding: 0;
-      backdrop-filter: blur(14px);
+      border-radius: 16px;
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.9);
+      z-index: 9999;
     }
 
     dialog::backdrop { background: rgba(0,0,0,.54); }
 
     .modal-body {
-      padding: 22px;
+      padding: 24px 22px;
       display: grid;
       gap: 15px;
       text-align: center;
@@ -1015,7 +1023,7 @@
         
         <div id="wishViewMode" class="dialog-mode">
           <h2 id="wishName">무명 불자님의 연등</h2>
-          <p id="wishText" style="white-space: pre-wrap; word-break: break-all; margin: 15px 0; font-size: 14px; line-height: 1.85;">모두가 자기 마음을 미워하지 않기를 바랍니다.</p>
+          <p id="wishText" style="white-space: pre-wrap; word-break: break-all; margin: 18px 0; font-size: 14px; line-height: 1.9; color: rgba(243, 242, 237, 0.9);">모두가 자기 마음을 미워하지 않기를 바랍니다.</p>
           
           <div class="share-actions" style="margin-top: 8px;" data-html2canvas-ignore>
             <button class="pill primary" type="button" id="closeWish" style="width: 100%;">닫기</button>
@@ -1500,7 +1508,6 @@
       }
     });
 
-    // [수정] 공유할 이미지 캡처 시 하단 워터마크 영역에 서비스 타이틀과 주소를 나란히 생성합니다.
     async function makeSharePreview(kind) {
       const phoneEl = document.querySelector(".phone");
       
@@ -1512,7 +1519,6 @@
       watermark.style.textAlign = "center";
       watermark.style.zIndex = "9999";
       
-      // '부처님오신날 - 번뇌금지'는 전통 석보체(Seokbo)로, URL은 고정 폰트로 정갈하게 얹어 가독성을 높입니다.
       watermark.innerHTML = `
         <div style="font-family: 'Seokbo', serif; font-size: 11px; margin-bottom: 4px; color: rgba(255, 255, 255, 0.65); letter-spacing: 0.15em;">부처님오신날 - 번뇌금지</div>
         <div style="font-family: 'BuddhaUI', sans-serif; font-size: 10px; color: rgba(255, 255, 255, 0.4); letter-spacing: 0.06em;">https://bit.ly/buddha_birth</div>
