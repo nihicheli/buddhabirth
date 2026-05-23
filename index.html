@@ -298,6 +298,11 @@
     textarea::placeholder,
     input::placeholder { color: rgba(255,255,255,.38); }
 
+    /* 숫자 패스워드 특화 마스킹 스타일 */
+    input[type="password"] {
+      -webkit-text-security: disc;
+    }
+
     .char-counter {
       align-self: flex-end;
       font-size: 11px;
@@ -721,6 +726,15 @@
       line-height: 1.7;
     }
 
+    /* 다이얼로그 모드 컨테이너 */
+    .dialog-mode {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      text-align: center;
+      width: 100%;
+    }
+
     .share-preview {
       width: 100%;
       aspect-ratio: 9 / 16;
@@ -887,7 +901,7 @@
       <img class="asset front-buddha" src="assets/buddha-front-original.png" alt="">
       <div class="copy">
         <h1 class="title">오늘의 한 말씀을<br>청하시겠습니까.</h1>
-        <p class="subtitle">지금의 번뇌에 머물 문장을 하나 띄웁니다.</p>
+        <p class="subtitle">부처의 말은 멀리 있지 않습니다.</p>
       </div>
       <p class="quote" id="dharmaQuote">마음이 흔들릴 때에는 붙잡지 말고 흔들림을 바라보십시오.</p>
       <p class="quote-source" id="dharmaSource">- 법구경 -</p>
@@ -899,8 +913,8 @@
 
     <section class="scene" data-scene="lantern-start" data-flow="lantern">
       <div class="copy">
-        <h1 class="title">당신의 소원을<br>연등에 담겠습니다.</h1>
-        <p class="subtitle" id="lanternCount">지금 <strong>0개</strong>의 연등이 켜졌습니다.<br>연등은 좌우로 넘겨 둘러볼 수 있습니다.</p>
+        <h1 class="title">당신의 소원을<br>연등에 담아보세요.</h1>
+        <p class="subtitle" id="lanternCount">지금까지 <strong>0개</strong>의 연등이 켜졌습니다.<br>좌우로 넘겨 소망을 살펴보세요.</p>
       </div>
       <div class="lantern-scroll list-lit endless two-line"><div class="lantern-strip" id="lanternStrip"></div></div>
       <input class="search" id="wishSearch" type="search" placeholder="발원한 사람 이름으로 검색">
@@ -927,7 +941,7 @@
 
     <section class="scene" data-scene="lantern-name" data-flow="lantern">
       <div class="copy">
-        <h1 class="title">이름을 작성하시면<br>연등을 띄워드리겠습니다.</h1>
+        <h1 class="title">이름을 작성해 주세요.</h1>
       </div>
       <label class="panel">
         <input id="visitor" type="text" placeholder="김불자" autocomplete="name" maxlength="10">
@@ -935,14 +949,30 @@
       </label>
       <div class="bottom-nav">
         <button class="nav-button" type="button" data-next="lantern-wish">이전</button>
+        <button class="nav-button" type="button" data-next="lantern-password">다음</button>
+      </div>
+    </section>
+
+    <!-- [신규] 소원 비밀번호 입력 단일 씬 -->
+    <section class="scene" data-scene="lantern-password" data-flow="lantern">
+      <div class="copy">
+        <h1 class="title">비밀번호 4자리를<br>지정해 주세요.</h1>
+        <p class="subtitle">나중에 소원을 수정하거나 삭제할 때 필요합니다.</p>
+      </div>
+      <label class="panel">
+        <input id="wishPassword" type="password" inputmode="numeric" pattern="[0-9]*" placeholder="••••" maxlength="4">
+        <div class="char-counter" id="passwordCounter">0/4자</div>
+      </label>
+      <div class="bottom-nav">
+        <button class="nav-button" type="button" data-next="lantern-name">이전</button>
         <button class="pill" type="button" id="raiseLantern">연등 띄우기</button>
       </div>
     </section>
 
     <section class="scene" data-scene="lantern-sky" data-flow="lantern">
       <div class="copy">
-        <h1 class="title">연등이<br>하늘로 오릅니다.</h1>
-        <p class="subtitle">내 연등을 눌러 공유 이미지를 확인하십시오.</p>
+        <h1 class="title">연등을<br>하늘로 띄우겠습니다.</h1>
+        <p class="subtitle">내 연등을 눌러보세요.</p>
       </div>
       <div class="sky-field">
         <img class="asset front-buddha" src="assets/buddha-front-original.png" alt="">
@@ -958,8 +988,8 @@
     <section class="scene" data-scene="meditation-start" data-flow="meditation">
       <img class="asset front-buddha" src="assets/buddha-front-original.png" alt="">
       <div class="copy">
-        <h1 class="title">소리와 함께<br>참선하시겠습니까.</h1>
-        <p class="subtitle">각 소리는 다시 누를 때까지 계속 울립니다.</p>
+        <h1 class="title">참선하시겠습니까.</h1>
+        <p class="subtitle">잠시 멈추는 것도 수행입니다.</p>
       </div>
       <div class="sound-grid">
         <button class="sound-card" type="button" data-sound="moktak"><img src="assets/moktak.png" alt=""><span>목탁</span></button>
@@ -986,15 +1016,52 @@
       </div>
     </section>
 
+    <!-- [수정] 수정/삭제 통합 대화상자 -->
     <dialog id="wishDialog">
       <div class="modal-body">
-        <h2 id="wishName">무명 불자님의 연등</h2>
-        <p id="wishText">모두가 자기 마음을 미워하지 않기를 바랍니다.</p>
-        <button class="pill" type="button" id="closeWish">닫기</button>
+        
+        <!-- Mode 1: 단순 상세조회 모드 -->
+        <div id="wishViewMode" class="dialog-mode">
+          <h2 id="wishName">무명 불자님의 연등</h2>
+          <p id="wishText" style="white-space: pre-wrap; word-break: break-all; margin: 15px 0; font-size: 14px; line-height: 1.85;">모두가 자기 마음을 미워하지 않기를 바랍니다.</p>
+          <div class="share-actions">
+            <button class="pill secondary" type="button" id="btnEditMode">수정</button>
+            <button class="pill secondary" type="button" id="btnDeleteMode" style="border-color: rgba(255,107,107,0.3); color: #ff6b6b;">삭제</button>
+          </div>
+          <button class="pill primary" type="button" id="closeWish" style="width:100%; margin-top:8px;">닫기</button>
+        </div>
+
+        <!-- Mode 2: 수정 처리 모드 -->
+        <div id="wishEditMode" class="dialog-mode" style="display: none;">
+          <h2>소원 수정하기</h2>
+          <textarea id="editWishInput" rows="3" placeholder="가족이 평안하기를 바랍니다." maxlength="50" style="border: 1px solid rgba(255,255,255,0.18); padding: 12px; border-radius: 8px; background: rgba(0,0,0,0.3); text-align: center; font-size: 14px; width: 100%;"></textarea>
+          <div class="char-counter" id="editWishCounter" style="margin-top: -8px;">0/50자</div>
+          
+          <input id="editPasswordInput" type="password" inputmode="numeric" pattern="[0-9]*" placeholder="설정한 비밀번호 4자리" maxlength="4" style="border-bottom: 1px solid rgba(255,255,255,0.2); font-size:16px; padding: 6px 0; text-align: center;">
+          
+          <div class="share-actions">
+            <button class="pill primary" type="button" id="btnSubmitEdit">수정 완료</button>
+            <button class="pill secondary" type="button" id="btnCancelEdit">취소</button>
+          </div>
+        </div>
+
+        <!-- Mode 3: 삭제 확인 모드 -->
+        <div id="wishDeleteMode" class="dialog-mode" style="display: none;">
+          <h2 style="color: #ff6b6b;">소원 삭제하기</h2>
+          <p style="font-size: 13px; color: rgba(255,255,255,.7); line-height: 1.6; margin: 5px 0;">이 연등 소원을 완전히 삭제하시겠습니까?<br>등록 시 설정한 4자리 비밀번호를 입력해 주세요.</p>
+          
+          <input id="deletePasswordInput" type="password" inputmode="numeric" pattern="[0-9]*" placeholder="설정한 비밀번호 4자리" maxlength="4" style="border-bottom: 1px solid rgba(255,255,255,0.2); font-size:16px; padding: 6px 0; text-align: center; margin-bottom: 10px;">
+          
+          <div class="share-actions">
+            <button class="pill primary" type="button" id="btnSubmitDelete" style="background: #ff6b6b; color: #fff; border-color: #ff6b6b;">삭제하기</button>
+            <button class="pill secondary" type="button" id="btnCancelDelete">취소</button>
+          </div>
+        </div>
+
       </div>
     </dialog>
 
-    <!-- 수정된 공유하기 모달 레이아웃 -->
+    <!-- 공유하기 모달 레이아웃 -->
     <dialog id="shareDialog">
       <div class="modal-body">
         <h2 id="shareDialogTitle">마음 공유하기</h2>
@@ -1033,14 +1100,21 @@
     const myLanternButton = document.querySelector("#myLanternButton");
     const dharmaQuote = document.querySelector("#dharmaQuote");
     const dharmaSource = document.querySelector("#dharmaSource");
+    
+    // 입력 바인딩
     const wishInput = document.querySelector("#wishInput");
     const visitor = document.querySelector("#visitor");
+    const wishPassword = document.querySelector("#wishPassword");
     const wishCounter = document.querySelector("#wishCounter");
     const visitorCounter = document.querySelector("#visitorCounter");
+    const passwordCounter = document.querySelector("#passwordCounter");
+    
     const lanternStrip = document.querySelector("#lanternStrip");
     const skyStrip = document.querySelector("#skyStrip");
     const lanternCount = document.querySelector("#lanternCount");
     const wishSearch = document.querySelector("#wishSearch");
+    
+    // 모달 바인딩
     const wishDialog = document.querySelector("#wishDialog");
     const wishName = document.querySelector("#wishName");
     const wishText = document.querySelector("#wishText");
@@ -1048,6 +1122,9 @@
     const sharePreview = document.querySelector("#sharePreview");
     const shareDialogTitle = document.querySelector("#shareDialogTitle");
     const toast = document.querySelector("#toast");
+
+    // 활성화된 모달 연등 데이터 보관용 변수
+    let activeDialogWish = null;
     
     let current = "intro";
     let introFace = "side";
@@ -1066,29 +1143,43 @@
       audio.volume = .85;
     });
 
+    // 기본 로컬 연등 목록 (id 포함으로 수정)
     const wishes = [
-      { name: "수연", text: "어머니의 수술이 무사히 끝나기를 바랍니다." },
-      { name: "도현", text: "불안한 마음이 조금만 조용해지기를 바랍니다." },
-      { name: "민재", text: "다시 시작할 용기가 생기기를 바랍니다." },
-      { name: "지우", text: "좋은 인연과 오래 머물 수 있기를 바랍니다." },
-      { name: "무명", text: "모두가 자기 마음을 미워하지 않기를 바랍니다." }
+      { id: "mock-1", name: "수연", text: "어머니의 수술이 무사히 끝나기를 바랍니다." },
+      { id: "mock-2", name: "도현", text: "불안한 마음이 조금만 조용해지기를 바랍니다." },
+      { id: "mock-3", name: "민재", text: "다시 시작할 용기가 생기기를 바랍니다." },
+      { id: "mock-4", name: "지우", text: "좋은 인연과 오래 머물 수 있기를 바랍니다." },
+      { id: "mock-5", name: "무명", text: "모두가 자기 마음을 미워하지 않기를 바랍니다." }
     ];
 
     const flowOrders = {
       intro: ["intro", "menu"],
       dharma: ["menu", "dharma-start"],
-      lantern: ["menu", "lantern-start", "lantern-wish", "lantern-name", "lantern-sky"],
+      lantern: ["menu", "lantern-start", "lantern-wish", "lantern-name", "lantern-password", "lantern-sky"],
       meditation: ["menu", "meditation-start"],
       meme: ["menu", "meme-start"]
     };
 
-    // 실시간 글자수 카운터 이벤트 리스너 추가
+    // 실시간 입력 카운터 및 마스킹/숫자 필터링
     wishInput.addEventListener("input", () => {
       wishCounter.textContent = `${wishInput.value.length}/50자`;
     });
 
     visitor.addEventListener("input", () => {
       visitorCounter.textContent = `${visitor.value.length}/10자`;
+    });
+
+    wishPassword.addEventListener("input", () => {
+      wishPassword.value = wishPassword.value.replace(/[^0-9]/g, ''); // 숫자 이외 제거
+      passwordCounter.textContent = `${wishPassword.value.length}/4자`;
+    });
+
+    // 상세 모달 내 암호창 숫자 전용 제한
+    document.querySelector("#editPasswordInput").addEventListener("input", (e) => {
+      e.target.value = e.target.value.replace(/[^0-9]/g, '');
+    });
+    document.querySelector("#deletePasswordInput").addEventListener("input", (e) => {
+      e.target.value = e.target.value.replace(/[^0-9]/g, '');
     });
 
     async function loadQuotes() {
@@ -1145,6 +1236,10 @@
         visitorCounter.textContent = `${visitor.value.length}/10자`;
         setTimeout(() => visitor.focus(), 250);
       }
+      if (name === "lantern-password") {
+        passwordCounter.textContent = `${wishPassword.value.length}/4자`;
+        setTimeout(() => wishPassword.focus(), 250);
+      }
       if (name === "meme-start") setTimeout(() => document.querySelector("#insightInput").focus(), 250);
     }
 
@@ -1164,8 +1259,10 @@
 
     function currentWish() {
       return {
+        id: "my-temp-id",
         name: visitor.value.trim() || "김불자",
-        text: wishInput.value.trim() || "가족이 평안하기를 바랍니다."
+        text: wishInput.value.trim() || "가족이 평안하기를 바랍니다.",
+        password: wishPassword.value.trim() || ""
       };
     }
 
@@ -1174,15 +1271,17 @@
       lanternCount.innerHTML = `지금 <strong>${count.toLocaleString("ko-KR")}개</strong>의 연등이 켜졌습니다.<br>연등은 좌우로 넘겨 둘러볼 수 있습니다.`;
     }
 
+    // 소원 불러오기 시 ID도 같이 맵핑
     async function loadStoredWishes() {
       if (!wishDb) return;
       const { data, error } = await wishDb
         .from("wishes")
-        .select("name,wish,created_at")
+        .select("id,name,wish,created_at")
         .order("created_at", { ascending: false })
         .limit(80);
       if (error || !Array.isArray(data)) return;
       wishes.splice(0, wishes.length, ...data.map((item) => ({
+        id: item.id,
         name: item.name || "무명",
         text: item.wish || "모두의 평안을 발원합니다."
       })));
@@ -1190,14 +1289,21 @@
       renderLanterns(lanternStrip, false);
     }
 
+    // 소원 데이터 베이스에 등록 시 비밀번호 반영
     async function saveWish(wish) {
       wishes.unshift(wish);
       updateLanternCount();
       if (!wishDb) return;
-      await wishDb.from("wishes").insert({
+      const { data, error } = await wishDb.from("wishes").insert({
         name: wish.name,
-        wish: wish.text
-      });
+        wish: wish.text,
+        password: wish.password
+      }).select();
+
+      // 삽입 직후 발급된 고유 ID 바인딩
+      if (data && data[0]) {
+        wish.id = data[0].id;
+      }
     }
 
     function renderLanterns(target, includeMine) {
@@ -1240,11 +1346,149 @@
       });
     }
 
+    // 소원 클릭 모달 오픈 시 모드 초기화
     function openWish(wish) {
+      activeDialogWish = wish;
+      
+      // 모드 영역 완전 초기화
+      document.querySelector("#wishViewMode").style.display = "flex";
+      document.querySelector("#wishEditMode").style.display = "none";
+      document.querySelector("#wishDeleteMode").style.display = "none";
+
       wishName.textContent = `${wish.name}님의 연등`;
       wishText.textContent = wish.text;
       wishDialog.showModal();
     }
+
+    // 수정 모드 진입
+    document.querySelector("#btnEditMode").addEventListener("click", () => {
+      document.querySelector("#wishViewMode").style.display = "none";
+      document.querySelector("#wishEditMode").style.display = "flex";
+      const editWishInput = document.querySelector("#editWishInput");
+      editWishInput.value = activeDialogWish.text;
+      document.querySelector("#editWishCounter").textContent = `${editWishInput.value.length}/50자`;
+      document.querySelector("#editPasswordInput").value = "";
+      setTimeout(() => editWishInput.focus(), 150);
+    });
+
+    // 삭제 모드 진입
+    document.querySelector("#btnDeleteMode").addEventListener("click", () => {
+      document.querySelector("#wishViewMode").style.display = "none";
+      document.querySelector("#wishDeleteMode").style.display = "flex";
+      const deletePasswordInput = document.querySelector("#deletePasswordInput");
+      deletePasswordInput.value = "";
+      setTimeout(() => deletePasswordInput.focus(), 150);
+    });
+
+    // 수정 모드 취소
+    document.querySelector("#btnCancelEdit").addEventListener("click", () => {
+      document.querySelector("#wishEditMode").style.display = "none";
+      document.querySelector("#wishViewMode").style.display = "flex";
+    });
+
+    // 삭제 모드 취소
+    document.querySelector("#btnCancelDelete").addEventListener("click", () => {
+      document.querySelector("#wishDeleteMode").style.display = "none";
+      document.querySelector("#wishViewMode").style.display = "flex";
+    });
+
+    // 글자수 서브 카운터 실시간 갱신 (수정용)
+    document.querySelector("#editWishInput").addEventListener("input", (e) => {
+      document.querySelector("#editWishCounter").textContent = `${e.target.value.length}/50자`;
+    });
+
+    // [신규 API 반영] 소원 삭제 최종 전송 처리
+    document.querySelector("#btnSubmitDelete").addEventListener("click", async () => {
+      const passwordInput = document.querySelector("#deletePasswordInput").value.trim();
+      if (passwordInput.length !== 4) {
+        showToast("비밀번호 4자리를 모두 입력하세요.");
+        return;
+      }
+      
+      if (!activeDialogWish) return;
+      const targetId = activeDialogWish.id;
+
+      // Supabase 연동 안 되어 있거나 목업 연등인 경우 처리
+      if (!wishDb || String(targetId).startsWith("mock-") || targetId === "my-temp-id") {
+        const idx = wishes.findIndex(w => w.id === targetId);
+        if (idx > -1) wishes.splice(idx, 1);
+        updateLanternCount();
+        renderLanterns(lanternStrip, false);
+        wishDialog.close();
+        showToast("연등이 삭제되었습니다.");
+        return;
+      }
+
+      // x-wish-password 헤더에 작성 비밀번호 전송
+      const { error } = await wishDb
+        .from("wishes")
+        .delete()
+        .eq("id", targetId)
+        .headers({ "x-wish-password": passwordInput });
+
+      if (error) {
+        showToast("비밀번호가 일치하지 않습니다.");
+        console.error(error);
+      } else {
+        const idx = wishes.findIndex(w => w.id === targetId);
+        if (idx > -1) wishes.splice(idx, 1);
+        updateLanternCount();
+        renderLanterns(lanternStrip, false);
+        wishDialog.close();
+        showToast("연등 소원이 삭제되었습니다.");
+      }
+    });
+
+    // [신규 API 반영] 소원 수정 최종 전송 처리
+    document.querySelector("#btnSubmitEdit").addEventListener("click", async () => {
+      const passwordInput = document.querySelector("#editPasswordInput").value.trim();
+      const newText = document.querySelector("#editWishInput").value.trim();
+
+      if (!newText) {
+        showToast("수정할 소원을 작성해 주세요.");
+        return;
+      }
+      if (passwordInput.length !== 4) {
+        showToast("비밀번호 4자리를 모두 입력하세요.");
+        return;
+      }
+
+      if (!activeDialogWish) return;
+      const targetId = activeDialogWish.id;
+
+      // Supabase 연동 안 되어 있거나 목업 연등인 경우 처리
+      if (!wishDb || String(targetId).startsWith("mock-") || targetId === "my-temp-id") {
+        activeDialogWish.text = newText;
+        renderLanterns(lanternStrip, false);
+        wishDialog.close();
+        showToast("소원이 성공적으로 수정되었습니다.");
+        return;
+      }
+
+      // x-wish-password 헤더에 작성 비밀번호 전송
+      const { error } = await wishDb
+        .from("wishes")
+        .update({ wish: newText })
+        .eq("id", targetId)
+        .headers({ "x-wish-password": passwordInput });
+
+      if (error) {
+        showToast("비밀번호가 일치하지 않거나 수정할 수 없습니다.");
+        console.error(error);
+      } else {
+        activeDialogWish.text = newText;
+        
+        // 내 발원 데이터 텍스트도 갱신 동기화
+        const myWish = currentWish();
+        if (activeDialogWish.name === myWish.name) {
+          wishInput.value = newText;
+        }
+
+        renderLanterns(lanternStrip, false);
+        wishDialog.close();
+        showToast("소원이 성공적으로 수정되었습니다.");
+      }
+    });
 
     function loadCanvasImage(src) {
       return new Promise((resolve, reject) => {
@@ -1334,14 +1578,12 @@
         ctx.shadowOffsetY = 0;
       }
 
-      // 캔버스 하단 출처 링크를 메인 대표 도메인 주소로 통일
       ctx.fillStyle = "rgba(255,255,255,.42)";
       ctx.font = "24px Noto Sans KR, sans-serif";
       ctx.fillText("https://nihicheli.github.io/buddhabirth/", 450, 1518);
       return canvas.toDataURL("image/png");
     }
 
-    // 우아한 토스트 메시지 띄우기 함수
     function showToast(message) {
       toast.textContent = message;
       toast.classList.add("show");
@@ -1362,7 +1604,6 @@
       sharePreview.src = await makeSharePreview(kind);
     }
 
-    // 로컬 이미지 다운로드 기능 구현
     document.querySelector("#downloadImage").addEventListener("click", () => {
       const dataUrl = sharePreview.src;
       if (!dataUrl) return;
@@ -1374,7 +1615,6 @@
       document.body.removeChild(link);
     });
 
-    // 대표 도메인 주소로 SNS 공유 및 복사 기능 구현
     document.querySelector("#copyShareLink").addEventListener("click", async () => {
       const SHARE_URL = "https://nihicheli.github.io/buddhabirth/";
       if (navigator.share) {
@@ -1394,7 +1634,6 @@
       }
     });
 
-    // 클립보드 복사 폴백 (IFrame 호환을 위한 document.execCommand)
     function copyToClipboard(val) {
       const tempInput = document.createElement("input");
       tempInput.value = val;
@@ -1452,11 +1691,19 @@
     document.querySelector("#shareDharma").addEventListener("click", () => share("dharma"));
     document.querySelector("#shareLantern").addEventListener("click", () => share("lantern"));
     document.querySelector("#shareMeme").addEventListener("click", () => share("meme"));
+    
+    // 연등 최종 올리기 검증 트리거
     document.querySelector("#raiseLantern").addEventListener("click", async () => {
+      const passwordVal = wishPassword.value.trim();
+      if (passwordVal.length !== 4) {
+        showToast("비밀번호 4자리를 정확히 입력해 주세요.");
+        return;
+      }
       const wish = currentWish();
       await saveWish(wish);
       show("lantern-sky");
     });
+    
     document.querySelector("#myLanternButton").addEventListener("click", () => openWish(currentWish()));
     document.querySelector("#closeWish").addEventListener("click", () => wishDialog.close());
     document.querySelector("#closeShare").addEventListener("click", () => shareDialog.close());
