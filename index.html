@@ -5,21 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>🙏부처님오신날 - 번뇌금지</title>
 
-  <!-- [추가] 브라우저 탭 및 모바일 홈 화면 파비콘 설정 -->
+  <!-- 브라우저 탭 및 모바일 홈 화면 파비콘 설정 -->
   <link rel="icon" type="image/jpeg" href="assets/buddhist-logo.png">
-  <link rel="apple-touch-icon" href="assets/buddhist-logo.png">
+  <link rel="apple-touch-icon" href="assets/realize.jpg">
 
-  <!-- [추가] 카카오톡, 페이스북, 라인 등 링크 공유 시 나타나는 사이트 정보 (Open Graph) 메타 태그 -->
+  <!-- 카카오톡, 페이스북, 라인 등 링크 공유 시 나타나는 사이트 정보 (Open Graph) 메타 태그 -->
   <meta property="og:title" content="🙏부처님오신날 - 번뇌금지">
-  <meta property="og:description" content="나만의 소원을 연등에 담아 하늘로 띄우고, 번뇌를 내려놓아 보세요.">
-  <meta property="og:image" content="assets/realize.jpg"> <!-- 지정해주신 대표 이미지 경로 적용 -->
+  <meta property="og:description" content="소원을 연등에 담아 하늘로 띄우고, 번뇌를 내려놓아 보세요.">
+  <meta property="og:image" content="assets/realize.jpg"> 
   <meta property="og:url" content="https://bit.ly/buddha_birth">
   <meta property="og:type" content="website">
 
   <!-- 트위터(X)용 카드 미리보기 메타 태그 -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="부처님오신날 - 번뇌금지">
-  <meta name="twitter:description" content="나만의 소원을 연등에 담아 하늘로 띄우고, 번뇌를 내려놓아 보세요.">
+  <meta name="twitter:description" content="소원을 연등에 담아 하늘로 띄우고, 번뇌를 내려놓아 보세요.">
   <meta name="twitter:image" content="assets/realize.jpg">
 
   <style>
@@ -109,6 +109,29 @@
       pointer-events: none;
     }
 
+    /* 플로팅 언어 대안 스위처 스타일링 */
+    .lang-toggle-btn {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      z-index: 100;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 999px;
+      padding: 6px 12px;
+      background: rgba(0, 0, 0, 0.45);
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      transition: border-color 0.15s ease, background 0.15s ease;
+      pointer-events: auto;
+    }
+    .lang-toggle-btn:hover {
+      border-color: rgba(255, 255, 255, 0.6);
+      background: rgba(0, 0, 0, 0.65);
+    }
+
     .asset {
       position: absolute;
       pointer-events: none;
@@ -171,7 +194,6 @@
       margin-bottom: 12px;
     }
 
-    /* [수정] "번뇌금지" 서체를 Seokbo(석보체)로 지정하여 전통 미감을 한층 더 끌어올렸습니다. */
     .brand-title .name {
       display: block;
       font-family: "Seokbo", serif;
@@ -895,12 +917,15 @@
 </head>
 <body>
   <main class="phone" aria-label="번뇌금지">
+    <!-- 플로팅 언어 스위처 (캡처 무시 처리됨) -->
+    <button id="langToggleBtn" class="lang-toggle-btn" type="button" aria-label="Change Language" data-html2canvas-ignore>🌐 EN</button>
+
     <section class="scene active" data-scene="intro">
       <img class="asset intro-buddha intro-side show" src="assets/buddha-side-original.png" alt="">
       <img class="asset intro-buddha intro-front" src="assets/buddha-front-original.png" alt="">
       <div class="brand-title" aria-label="부처님오신날 번뇌금지">
-        <span class="day">부처님오신날</span>
-        <span class="name">번뇌금지</span>
+        <span class="day" data-i18n="day">부처님오신날</span>
+        <span class="name" data-i18n="name">번뇌금지</span>
       </div>
       <button class="tap-layer" type="button" data-next="menu" aria-label="입장"></button>
     </section>
@@ -910,14 +935,14 @@
       <div class="center">
         <div class="menu-stack">
           <img class="menu-logo" src="assets/buddhist-logo.png" alt="">
-          <button class="menu-button" type="button" data-flow="dharma">법문청취</button>
+          <button class="menu-button" type="button" data-flow="dharma" data-i18n="menu_dharma">법문청취</button>
           <div class="stem" aria-hidden="true"></div>
-          <button class="menu-button" type="button" data-flow="lantern">연등발원</button>
+          <button class="menu-button" type="button" data-flow="lantern" data-i18n="menu_lantern">연등발원</button>
           <div class="stem" aria-hidden="true"></div>
-          <button class="menu-button" type="button" data-flow="meditation">참선수행</button>
+          <button class="menu-button" type="button" data-flow="meditation" data-i18n="menu_meditation">참선수행</button>
           <div class="stem" aria-hidden="true"></div>
-          <button class="menu-button" type="button" data-flow="meme">깨닫다!</button>
-          <p class="menu-footer">부처님오신날 - 번뇌금지</p>
+          <button class="menu-button" type="button" data-flow="meme" data-i18n="menu_meme">깨닫다!</button>
+          <p class="menu-footer" data-i18n="menu_footer">부처님오신날 - 번뇌금지</p>
         </div>
       </div>
     </section>
@@ -925,78 +950,78 @@
     <section class="scene" data-scene="dharma-start" data-flow="dharma">
       <img class="asset front-buddha" src="assets/buddha-front-original.png" alt="">
       <div class="copy">
-        <h1 class="title">오늘의 한 말씀을<br>청하시겠습니까.</h1>
-        <p class="subtitle">부처의 말은 멀리 있지 않습니다.</p>
+        <h1 class="title" data-i18n="dharma_title">오늘의 한 말씀을<br>청하시겠습니까.</h1>
+        <p class="subtitle" data-i18n="dharma_subtitle">부처의 말은 멀리 있지 않습니다.</p>
       </div>
       <p class="quote" id="dharmaQuote">마음이 흔들릴 때에는 붙잡지 말고 흔들림을 바라보십시오.</p>
       <p class="quote-source" id="dharmaSource">- 법구경 -</p>
       <div class="bottom-nav" data-html2canvas-ignore>
-        <button class="nav-button" type="button" data-next="menu">이전</button>
-        <button class="pill" type="button" id="shareDharma">공유</button>
+        <button class="nav-button" type="button" data-next="menu" data-i18n="back">이전</button>
+        <button class="pill" type="button" id="shareDharma" data-i18n="share">공유</button>
       </div>
     </section>
 
     <section class="scene" data-scene="lantern-start" data-flow="lantern">
       <div class="copy">
-        <h1 class="title">당신의 소원을<br>연등에 담아보세요.</h1>
+        <h1 class="title" data-i18n="lantern_title">당신의 소원을<br>연등에 담아보세요.</h1>
         <p class="subtitle" id="lanternCount">지금까지 <strong>0개</strong>의 연등이 켜졌습니다.<br>좌우로 넘겨 소망을 살펴보세요.</p>
       </div>
       <div class="lantern-scroll list-lit endless two-line"><div class="lantern-strip" id="lanternStrip"></div></div>
-      <input class="search" id="wishSearch" type="search" placeholder="발원한 사람 이름으로 검색" data-html2canvas-ignore>
+      <input class="search" id="wishSearch" type="search" placeholder="발원한 사람 이름으로 검색" data-i18n-placeholder="search_placeholder" data-html2canvas-ignore>
       <div class="lantern-actions" data-html2canvas-ignore>
-        <button class="nav-button" type="button" data-next="menu">이전</button>
-        <button class="primary-action" type="button" data-next="lantern-wish">발원하기</button>
+        <button class="nav-button" type="button" data-next="menu" data-i18n="back">이전</button>
+        <button class="primary-action" type="button" data-next="lantern-wish" data-i18n="wish_btn">발원하기</button>
         <span aria-hidden="true"></span>
       </div>
     </section>
 
     <section class="scene" data-scene="lantern-wish" data-flow="lantern">
       <div class="copy">
-        <h1 class="title">어떤 소원을<br>밝히시겠습니까.</h1>
+        <h1 class="title" data-i18n="wish_title">어떤 소원을<br>밝히시겠습니까.</h1>
       </div>
       <label class="panel">
-        <textarea id="wishInput" rows="3" placeholder="가족이 평안하기를 바랍니다." maxlength="50"></textarea>
+        <textarea id="wishInput" rows="3" placeholder="가족이 평안하기를 바랍니다." data-i18n-placeholder="wish_placeholder" maxlength="50"></textarea>
         <div class="char-counter" id="wishCounter">0/50자</div>
       </label>
       <div class="bottom-nav" data-html2canvas-ignore>
-        <button class="nav-button" type="button" data-next="lantern-start">이전</button>
-        <button class="nav-button" type="button" data-next="lantern-name">다음</button>
+        <button class="nav-button" type="button" data-next="lantern-start" data-i18n="back">이전</button>
+        <button class="nav-button" type="button" data-next="lantern-name" data-i18n="next">다음</button>
       </div>
     </section>
 
     <section class="scene" data-scene="lantern-name" data-flow="lantern">
       <div class="copy">
-        <h1 class="title">이름을 작성해 주세요.</h1>
+        <h1 class="title" data-i18n="name_title">이름을 작성해 주세요.</h1>
       </div>
       <label class="panel">
-        <input id="visitor" type="text" placeholder="김불자" autocomplete="name" maxlength="10">
+        <input id="visitor" type="text" placeholder="김불자" data-i18n-placeholder="name_placeholder" autocomplete="name" maxlength="10">
         <div class="char-counter" id="visitorCounter">0/10자</div>
       </label>
       <div class="bottom-nav" data-html2canvas-ignore>
-        <button class="nav-button" type="button" data-next="lantern-wish">이전</button>
-        <button class="nav-button" type="button" data-next="lantern-password">다음</button>
+        <button class="nav-button" type="button" data-next="lantern-wish" data-i18n="back">이전</button>
+        <button class="nav-button" type="button" data-next="lantern-password" data-i18n="next">다음</button>
       </div>
     </section>
 
     <section class="scene" data-scene="lantern-password" data-flow="lantern">
       <div class="copy">
-        <h1 class="title">비밀번호 4자리를<br>지정해 주세요.</h1>
-        <p class="subtitle">나중에 소원을 수정하거나 삭제할 때 필요합니다.</p>
+        <h1 class="title" data-i18n="password_title">비밀번호 4자리를<br>지정해 주세요.</h1>
+        <p class="subtitle" data-i18n="password_subtitle">나중에 소원을 수정하거나 삭제할 때 필요합니다.</p>
       </div>
       <label class="panel">
-        <input id="wishPassword" type="password" inputmode="numeric" pattern="[0-9]*" placeholder="••••" maxlength="4">
+        <input id="wishPassword" type="password" inputmode="numeric" pattern="[0-9]*" placeholder="••••" data-i18n-placeholder="password_placeholder" maxlength="4">
         <div class="char-counter" id="passwordCounter">0/4자</div>
       </label>
       <div class="bottom-nav" data-html2canvas-ignore>
-        <button class="nav-button" type="button" data-next="lantern-name">이전</button>
-        <button class="pill" type="button" id="raiseLantern">연등 띄우기</button>
+        <button class="nav-button" type="button" data-next="lantern-name" data-i18n="back">이전</button>
+        <button class="pill" type="button" id="raiseLantern" data-i18n="float_btn">연등 띄우기</button>
       </div>
     </section>
 
     <section class="scene" data-scene="lantern-sky" data-flow="lantern">
       <div class="copy">
-        <h1 class="title">연등을 하늘로<br>띄우겠습니다.</h1>
-        <p class="subtitle">내 연등을 눌러보세요.</p>
+        <h1 class="title" data-i18n="sky_title">연등을 하늘로<br>띄우겠습니다.</h1>
+        <p class="subtitle" data-i18n="sky_subtitle">내 연등을 눌러보세요.</p>
       </div>
       <div class="sky-field">
         <img class="asset front-buddha" src="assets/buddha-front-original.png" alt="">
@@ -1004,38 +1029,38 @@
         <div class="lantern-scroll endless"><div class="lantern-strip" id="skyStrip"></div></div>
       </div>
       <div class="bottom-nav" data-html2canvas-ignore style="justify-content: center;">
-        <button class="nav-button" type="button" data-next="menu">처음 화면으로 돌아가기</button>
+        <button class="nav-button" type="button" data-next="menu" data-i18n="back_main">처음 화면으로 돌아가기</button>
       </div>
     </section>
 
     <section class="scene" data-scene="meditation-start" data-flow="meditation">
       <img class="asset front-buddha" src="assets/buddha-front-original.png" alt="">
       <div class="copy">
-        <h1 class="title">참선하시겠습니까.</h1>
-        <p class="subtitle">잠시 멈추는 것도 수행입니다.</p>
+        <h1 class="title" data-i18n="med_title">참선하시겠습니까.</h1>
+        <p class="subtitle" data-i18n="med_subtitle">잠시 멈추는 것도 수행입니다.</p>
       </div>
       <div class="sound-grid">
-        <button class="sound-card" type="button" data-sound="moktak"><img src="assets/moktak.png" alt=""><span>목탁</span></button>
-        <button class="sound-card" type="button" data-sound="bowl"><img src="assets/singing-bowl.png" alt=""><span>싱잉볼</span></button>
+        <button class="sound-card" type="button" data-sound="moktak"><img src="assets/moktak.png" alt=""><span data-i18n="moktak">목탁</span></button>
+        <button class="sound-card" type="button" data-sound="bowl"><img src="assets/singing-bowl.png" alt=""><span data-i18n="bowl">싱잉볼</span></button>
       </div>
       <div class="bottom-nav" data-html2canvas-ignore>
-        <button class="nav-button" type="button" data-next="menu">이전</button>
-        <button class="nav-button" type="button" data-next="meme-start">깨닫다!</button>
+        <button class="nav-button" type="button" data-next="menu" data-i18n="back">이전</button>
+        <button class="nav-button" type="button" data-next="meme-start" data-i18n="menu_meme">깨닫다!</button>
       </div>
     </section>
 
     <section class="scene" data-scene="meme-start" data-flow="meme">
       <div class="copy">
-        <h1 class="title">깨닫다!</h1>
+        <h1 class="title" data-i18n="meme_title">깨닫다!</h1>
       </div>
       <div class="meme-stage" id="memeStage">
         <img class="meme-buddha" src="assets/buddha-front-original.png" alt="">
         <img class="bubble" src="assets/insight-bubble.png" alt="">
-        <textarea class="bubble-text" id="insightInput" rows="3" placeholder="깨달음을 입력하세요" maxlength="40"></textarea>
+        <textarea class="bubble-text" id="insightInput" rows="3" placeholder="깨달음을 입력하세요" data-i18n-placeholder="meme_placeholder" maxlength="40"></textarea>
       </div>
       <div class="bottom-nav" data-html2canvas-ignore>
-        <button class="nav-button" type="button" data-next="menu">이전</button>
-        <button class="pill" type="button" id="shareMeme">공유</button>
+        <button class="nav-button" type="button" data-next="menu" data-i18n="back">이전</button>
+        <button class="pill" type="button" id="shareMeme" data-i18n="share">공유</button>
       </div>
     </section>
 
@@ -1048,39 +1073,39 @@
             <p id="wishText" style="white-space: pre-wrap; word-break: break-all; margin: 18px 0; font-size: 14px; line-height: 1.9; color: rgba(243, 242, 237, 0.9);">모두가 자기 마음을 미워하지 않기를 바랍니다.</p>
             
             <div class="share-actions" style="margin-top: 8px;" data-html2canvas-ignore>
-              <button class="pill primary" type="button" id="closeWish" style="width: 100%;">닫기</button>
-              <button class="pill secondary" type="button" id="shareLantern" style="width: 100%;">공유</button>
+              <button class="pill primary" type="button" id="closeWish" style="width: 100%;" data-i18n="close">닫기</button>
+              <button class="pill secondary" type="button" id="shareLantern" style="width: 100%;" data-i18n="share">공유</button>
             </div>
 
             <div style="margin-top: 18px; padding-top: 12px; border-top: 1px dashed rgba(255,255,255,0.12); display: flex; justify-content: center; gap: 20px;" data-html2canvas-ignore>
-              <button class="nav-button" type="button" id="btnEditMode" style="color: rgba(255,255,255,0.5); text-decoration: none;">소원 수정</button>
+              <button class="nav-button" type="button" id="btnEditMode" style="color: rgba(255,255,255,0.5); text-decoration: none;" data-i18n="modal_edit_btn">소원 수정</button>
               <span style="color: rgba(255,255,255,0.15); font-size: 11px;">|</span>
-              <button class="nav-button" type="button" id="btnDeleteMode" style="color: rgba(255,107,107,0.6); text-decoration: none;">소원 삭제</button>
+              <button class="nav-button" type="button" id="btnDeleteMode" style="color: rgba(255,107,107,0.6); text-decoration: none;" data-i18n="modal_delete_mode_btn">소원 삭제</button>
             </div>
           </div>
 
           <div id="wishEditMode" class="dialog-mode" style="display: none;">
-            <h2>소원 수정하기</h2>
-            <textarea id="editWishInput" rows="3" placeholder="가족이 평안하기를 바랍니다." maxlength="50" style="border: 1px solid rgba(255,255,255,0.18); padding: 12px; border-radius: 8px; background: rgba(0,0,0,0.3); text-align: center; font-size: 14px; width: 100%;"></textarea>
+            <h2 data-i18n="modal_edit_title">소원 수정하기</h2>
+            <textarea id="editWishInput" rows="3" placeholder="가족이 평안하기를 바랍니다." data-i18n-placeholder="wish_placeholder" maxlength="50" style="border: 1px solid rgba(255,255,255,0.18); padding: 12px; border-radius: 8px; background: rgba(0,0,0,0.3); text-align: center; font-size: 14px; width: 100%;"></textarea>
             <div class="char-counter" id="editWishCounter" style="margin-top: -8px;">0/50자</div>
             
-            <input id="editPasswordInput" type="password" inputmode="numeric" pattern="[0-9]*" placeholder="설정한 비밀번호 4자리" maxlength="4" style="border-bottom: 1px solid rgba(255,255,255,0.2); font-size:16px; padding: 6px 0; text-align: center;">
+            <input id="editPasswordInput" type="password" inputmode="numeric" pattern="[0-9]*" placeholder="설정한 비밀번호 4자리" data-i18n-placeholder="password_placeholder" maxlength="4" style="border-bottom: 1px solid rgba(255,255,255,0.2); font-size:16px; padding: 6px 0; text-align: center;">
             
             <div class="share-actions">
-              <button class="pill primary" type="button" id="btnSubmitEdit">수정 완료</button>
-              <button class="pill secondary" type="button" id="btnCancelEdit">취소</button>
+              <button class="pill primary" type="button" id="btnSubmitEdit" data-i18n="btn_submit_edit">수정 완료</button>
+              <button class="pill secondary" type="button" id="btnCancelEdit" data-i18n="btn_cancel">취소</button>
             </div>
           </div>
 
           <div id="wishDeleteMode" class="dialog-mode" style="display: none;">
-            <h2 style="color: #ff6b6b;">소원 삭제하기</h2>
-            <p style="font-size: 13px; color: rgba(255,255,255,.7); line-height: 1.6; margin: 5px 0;">이 연등 소원을 완전히 삭제하시겠습니까?<br>등록 시 설정한 4자리 비밀번호를 입력해 주세요.</p>
+            <h2 style="color: #ff6b6b;" data-i18n="modal_delete_title">소원 삭제하기</h2>
+            <p style="font-size: 13px; color: rgba(255,255,255,.7); line-height: 1.6; margin: 5px 0;" data-i18n="modal_delete_desc">이 연등 소원을 완전히 삭제하시겠습니까?<br>등록 시 설정한 4자리 비밀번호를 입력해 주세요.</p>
             
-            <input id="deletePasswordInput" type="password" inputmode="numeric" pattern="[0-9]*" placeholder="설정한 비밀번호 4자리" maxlength="4" style="border-bottom: 1px solid rgba(255,255,255,0.2); font-size:16px; padding: 6px 0; text-align: center; margin-bottom: 10px;">
+            <input id="deletePasswordInput" type="password" inputmode="numeric" pattern="[0-9]*" placeholder="설정한 비밀번호 4자리" data-i18n-placeholder="password_placeholder" maxlength="4" style="border-bottom: 1px solid rgba(255,255,255,0.2); font-size:16px; padding: 6px 0; text-align: center; margin-bottom: 10px;">
             
             <div class="share-actions">
-              <button class="pill primary" type="button" id="btnSubmitDelete" style="background: #ff6b6b; color: #fff; border-color: #ff6b6b;">삭제하기</button>
-              <button class="pill secondary" type="button" id="btnCancelDelete">취소</button>
+              <button class="pill primary" type="button" id="btnSubmitDelete" style="background: #ff6b6b; color: #fff; border-color: #ff6b6b;" data-i18n="modal_delete_btn">삭제하기</button>
+              <button class="pill secondary" type="button" id="btnCancelDelete" data-i18n="btn_cancel">취소</button>
             </div>
           </div>
 
@@ -1091,13 +1116,13 @@
     <div id="shareDialog" class="modal-overlay" data-html2canvas-ignore>
       <div class="modal-card">
         <div class="modal-body">
-          <h2 id="shareDialogTitle">마음 공유하기</h2>
+          <h2 id="shareDialogTitle" data-i18n="modal_share_title">마음 공유하기</h2>
           <img class="share-preview" id="sharePreview" alt="공유 이미지 미리보기">
           <div class="share-actions">
-            <button class="pill primary" type="button" id="downloadImage">사진 저장</button>
-            <button class="pill secondary" type="button" id="copyShareLink">링크 공유</button>
+            <button class="pill primary" type="button" id="downloadImage" data-i18n="modal_share_save">사진 저장</button>
+            <button class="pill secondary" type="button" id="copyShareLink" data-i18n="modal_share_link">링크 공유</button>
           </div>
-          <button class="nav-button" type="button" id="closeShare" style="margin-top: 6px; display: inline-block;">닫기</button>
+          <button class="nav-button" type="button" id="closeShare" style="margin-top: 6px; display: inline-block;" data-i18n="close">닫기</button>
         </div>
       </div>
     </div>
@@ -1117,6 +1142,142 @@
     const wishDb = SUPABASE_URL && SUPABASE_ANON_KEY && window.supabase
       ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
       : null;
+
+    // 언어 사전 딕셔너리 정의
+    const translations = {
+      ko: {
+        day: "부처님오신날",
+        name: "번뇌금지",
+        menu_dharma: "법문청취",
+        menu_lantern: "연등발원",
+        menu_meditation: "참선수행",
+        menu_meme: "깨닫다!",
+        menu_footer: "부처님오신날 - 번뇌금지",
+        dharma_title: "오늘의 한 말씀을<br>청하시겠습니까.",
+        dharma_subtitle: "부처의 말은 멀리 있지 않습니다.",
+        back: "이전",
+        share: "공유",
+        close: "닫기",
+        lantern_title: "당신의 소원을<br>연등에 담아보세요.",
+        lantern_subtitle: (count) => `지금까지 <strong>${count.toLocaleString("ko-KR")}개</strong>의 연등이 켜졌습니다.<br>좌우로 넘겨 소망을 살펴보세요.`,
+        search_placeholder: "발원한 사람 이름으로 검색",
+        wish_btn: "발원하기",
+        wish_title: "어떤 소원을<br>밝히시겠습니까.",
+        wish_placeholder: "가족이 평안하기를 바랍니다.",
+        next: "다음",
+        name_title: "이름을 작성해 주세요.",
+        name_placeholder: "김불자",
+        password_title: "비밀번호 4자리를<br>지정해 주세요.",
+        password_subtitle: "나중에 소원을 수정하거나 삭제할 때 필요합니다.",
+        password_placeholder: "••••",
+        float_btn: "연등 띄우기",
+        sky_title: "연등을 하늘로<br>띄우겠습니다.",
+        sky_subtitle: "내 연등을 눌러보세요.",
+        back_main: "처음 화면으로 돌아가기",
+        med_title: "참선하시겠습니까.",
+        med_subtitle: "잠시 멈추는 것도 수행입니다.",
+        moktak: "목탁",
+        bowl: "싱잉볼",
+        meme_title: "깨닫다!",
+        meme_placeholder: "깨달음을 입력하세요",
+        toast_wish: "소원을 입력해 주세요.",
+        toast_name: "이름을 입력해 주세요.",
+        toast_pw_exactly: "비밀번호 4자리를 정확히 입력해 주세요.",
+        toast_pw_all: "비밀번호 4자리를 모두 입력하세요.",
+        toast_edit_write: "수정할 소원을 작성해 주세요.",
+        toast_edit_success: "소원이 성공적으로 수정되었습니다.",
+        toast_delete_success: "연등 소원이 삭제되었습니다.",
+        toast_delete_failed: "삭제 실패: ",
+        toast_edit_failed: "수정 실패: ",
+        toast_link_copy: "공유 링크가 복사되었습니다.",
+        toast_link_failed: "링크 복사 실패. 다시 시도해 주세요.",
+        watermark_title: "부처님오신날 - 번뇌금지",
+        modal_edit_title: "소원 수정하기",
+        modal_delete_title: "소원 삭제하기",
+        modal_delete_desc: "이 연등 소원을 완전히 삭제하시겠습니까?<br>등록 시 설정한 4자리 비밀번호를 입력해 주세요.",
+        modal_delete_btn: "삭제하기",
+        modal_share_title: "마음 공유하기",
+        modal_share_save: "사진 저장",
+        modal_share_link: "링크 공유",
+        modal_edit_btn: "소원 수정",
+        modal_delete_mode_btn: "소원 삭제",
+        btn_submit_edit: "수정 완료",
+        btn_cancel: "취소",
+        char_count: (curr, max) => `${curr}/${max}자`,
+        pw_error: "비밀번호 오류",
+        anon_lantern: "님의 연등"
+      },
+      en: {
+        day: "Buddha's Birthday",
+        name: "Zen Mind",
+        menu_dharma: "Dharma Wisdom",
+        menu_lantern: "Light a Lantern",
+        menu_meditation: "Zen Meditation",
+        menu_meme: "Enlighten!",
+        menu_footer: "Buddha's Birthday - Zen Mind",
+        dharma_title: "Would you like to<br>hear today's wisdom?",
+        dharma_subtitle: "The Buddha's words are never far away.",
+        back: "Back",
+        share: "Share",
+        close: "Close",
+        lantern_title: "Put your wish<br>into a lantern.",
+        lantern_subtitle: (count) => `<strong>${count.toLocaleString("en-US")}</strong> lanterns have been lit so far.<br>Swipe left or right to explore wishes.`,
+        search_placeholder: "Search by devotee name",
+        wish_btn: "Make a Wish",
+        wish_title: "What wish would you<br>like to light up?",
+        wish_placeholder: "May my family find peace and happiness.",
+        next: "Next",
+        name_title: "Please enter your name.",
+        name_placeholder: "Devotee",
+        password_title: "Please set a<br>4-digit password.",
+        password_subtitle: "Needed to edit or delete your wish later.",
+        password_placeholder: "••••",
+        float_btn: "Float Lantern",
+        sky_title: "Floating your lantern<br>to the sky.",
+        sky_subtitle: "Tap on your lantern to view.",
+        back_main: "Back to Main Screen",
+        med_title: "Would you like to meditate?",
+        med_subtitle: "Stopping for a moment is also a practice.",
+        moktak: "Moktak",
+        bowl: "Singing Bowl",
+        meme_title: "Enlighten!",
+        meme_placeholder: "Enter your realization",
+        toast_wish: "Please enter a wish.",
+        toast_name: "Please enter a name.",
+        toast_pw_exactly: "Please enter exactly 4 digits for the password.",
+        toast_pw_all: "Please enter all 4 digits of your password.",
+        toast_edit_write: "Please write a wish to edit.",
+        toast_edit_success: "Wish successfully updated.",
+        toast_delete_success: "Lantern wish deleted successfully.",
+        toast_delete_failed: "Delete failed: ",
+        toast_edit_failed: "Update failed: ",
+        toast_link_copy: "Share link copied to clipboard.",
+        toast_link_failed: "Link copy failed. Please try again.",
+        watermark_title: "Buddha's Birthday - Zen Mind",
+        modal_edit_title: "Edit Wish",
+        modal_delete_title: "Delete Wish",
+        modal_delete_desc: "Are you sure you want to delete this wish?<br>Please enter the 4-digit password you set.",
+        modal_delete_btn: "Delete",
+        modal_share_title: "Share Your Mind",
+        modal_share_save: "Save Image",
+        modal_share_link: "Share Link",
+        modal_edit_btn: "Edit Wish",
+        modal_delete_mode_btn: "Delete Wish",
+        btn_submit_edit: "Save",
+        btn_cancel: "Cancel",
+        char_count: (curr, max) => `${curr}/${max} chars`,
+        pw_error: "Incorrect password",
+        anon_lantern: "'s Lantern"
+      }
+    };
+
+    let currentLang = "ko"; // 기본 설정은 한국어
+
+    // 시스템 브라우저 기본 언어 체크
+    const userLang = navigator.language || navigator.userLanguage;
+    if (userLang && !userLang.startsWith("ko")) {
+      currentLang = "en";
+    }
 
     const phone = document.querySelector(".phone");
     const scenes = [...document.querySelectorAll(".scene")];
@@ -1155,7 +1316,16 @@
     let current = "intro";
     let introFace = "side";
     let currentQuote = { quote: "마음이 흔들릴 때에는 붙잡지 말고 흔들림을 바라보십시오.", source: "법구경" };
-    let quotes = [currentQuote];
+    
+    let quotesKO = [];
+    let quotesEN = [
+      { quote: "Do not dwell in the past, do not dream of the future, concentrate the mind on the present moment.", source: "The Buddha" },
+      { quote: "Peace comes from within. Do not seek it without.", source: "The Buddha" },
+      { quote: "The mind is everything. What you think you become.", source: "The Buddha" },
+      { quote: "There is no path to happiness: happiness is the path.", source: "Gautama Buddha" },
+      { quote: "Just as a candle cannot burn without fire, men cannot live without a spiritual life.", source: "The Buddha" }
+    ];
+
     const soundPlayers = {
       moktak: new Audio("assets/moktak-sound.mp3"),
       bowl: new Audio("assets/singing-bowl-sound.mp3")
@@ -1181,6 +1351,23 @@
       audio.volume = .85;
     });
 
+    const wishesKO = [
+      { id: "mock-1", name: "수연", text: "어머니의 수술이 무사히 끝나기를 바랍니다." },
+      { id: "mock-2", name: "도현", text: "불안한 마음이 조금만 조용해지기를 바랍니다." },
+      { id: "mock-3", name: "민재", text: "다시 시작할 용기가 생기기를 바랍니다." },
+      { id: "mock-4", name: "지우", text: "좋은 인연과 오래 머물 수 있기를 바랍니다." },
+      { id: "mock-5", name: "무명", text: "모두가 자기 마음을 미워하지 않기를 바랍니다." }
+    ];
+
+    const wishesEN = [
+      { id: "mock-1", name: "Suyeon", text: "I wish my mother's surgery ends safely." },
+      { id: "mock-2", name: "Dohyun", text: "I hope my anxious mind becomes a little quieter." },
+      { id: "mock-3", name: "Minjae", text: "May I find the courage to start again." },
+      { id: "mock-4", name: "Jiwoo", text: "Wishing to stay with good connections for a long time." },
+      { id: "mock-5", name: "Anonymous", text: "I hope everyone learns not to hate their own minds." }
+    ];
+
+    // 가상 데이터베이스 초기 상태
     const wishes = [
       { id: "mock-1", name: "수연", text: "어머니의 수술이 무사히 끝나기를 바랍니다." },
       { id: "mock-2", name: "도현", text: "불안한 마음이 조금만 조용해지기를 바랍니다." },
@@ -1197,17 +1384,63 @@
       meme: ["menu", "meme-start"]
     };
 
+    // 실시간 다국어 번역 반영 함수
+    function setLanguage(lang) {
+      currentLang = lang;
+      
+      // 언어 스위치 버튼 텍스트 변경
+      const langToggleBtn = document.querySelector("#langToggleBtn");
+      langToggleBtn.textContent = lang === "ko" ? "🌐 EN" : "🌐 KO";
+
+      // 1. data-i18n 속성 번역 갱신
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.dataset.i18n;
+        if (translations[lang] && translations[lang][key]) {
+          el.innerHTML = translations[lang][key];
+        }
+      });
+
+      // 2. data-i18n-placeholder 속성 번역 갱신
+      document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+        const key = el.dataset.i18nPlaceholder;
+        if (translations[lang] && translations[lang][key]) {
+          el.placeholder = translations[lang][key];
+        }
+      });
+
+      // 3. 다국어 기반 카운터 수치 갱신
+      wishCounter.textContent = translations[currentLang].char_count(wishInput.value.length, 50);
+      visitorCounter.textContent = translations[currentLang].char_count(visitor.value.length, 10);
+      passwordCounter.textContent = translations[currentLang].char_count(wishPassword.value.length, 4);
+
+      const editWishInput = document.querySelector("#editWishInput");
+      document.querySelector("#editWishCounter").textContent = translations[currentLang].char_count(editWishInput.value.length, 50);
+
+      // 4. 지혜 법구경 구절 갱신
+      if (current === "dharma-start") {
+        renderWisdomQuote();
+      }
+
+      // 5. 연등 리스트 뷰 갱신
+      refreshAllLanternViews();
+    }
+
+    // 언어 스위칭 버튼 바인딩
+    document.querySelector("#langToggleBtn").addEventListener("click", () => {
+      setLanguage(currentLang === "ko" ? "en" : "ko");
+    });
+
     wishInput.addEventListener("input", () => {
-      wishCounter.textContent = `${wishInput.value.length}/50자`;
+      wishCounter.textContent = translations[currentLang].char_count(wishInput.value.length, 50);
     });
 
     visitor.addEventListener("input", () => {
-      visitorCounter.textContent = `${visitor.value.length}/10자`;
+      visitorCounter.textContent = translations[currentLang].char_count(visitor.value.length, 10);
     });
 
     wishPassword.addEventListener("input", () => {
       wishPassword.value = wishPassword.value.replace(/[^0-9]/g, '');
-      passwordCounter.textContent = `${wishPassword.value.length}/4자`;
+      passwordCounter.textContent = translations[currentLang].char_count(wishPassword.value.length, 4);
     });
 
     document.querySelector("#editPasswordInput").addEventListener("input", (e) => {
@@ -1219,16 +1452,16 @@
 
     async function loadQuotes() {
       if (Array.isArray(window.BUDDHIST_QUOTES) && window.BUDDHIST_QUOTES.length) {
-        quotes = normalizeQuotes(window.BUDDHIST_QUOTES);
-        setQuote();
+        quotesKO = normalizeQuotes(window.BUDDHIST_QUOTES);
+        renderWisdomQuote();
         return;
       }
       try {
         const response = await fetch("assets/buddhist_quotes.json");
         const data = await response.json();
-        if (Array.isArray(data) && data.length) quotes = normalizeQuotes(data);
+        if (Array.isArray(data) && data.length) quotesKO = normalizeQuotes(data);
       } catch {}
-      setQuote();
+      renderWisdomQuote();
     }
 
     function normalizeQuotes(items) {
@@ -1238,8 +1471,9 @@
         .map((item) => ({ quote: item.quote, source: item.source || "불교 경전" }));
     }
 
-    function setQuote() {
-      currentQuote = quotes[Math.floor(Math.random() * quotes.length)] || currentQuote;
+    function renderWisdomQuote() {
+      const activeQuotes = currentLang === "ko" ? (quotesKO.length ? quotesKO : quotesEN) : quotesEN;
+      currentQuote = activeQuotes[Math.floor(Math.random() * activeQuotes.length)] || currentQuote;
       dharmaQuote.textContent = currentQuote.quote;
       dharmaSource.textContent = `- ${currentQuote.source} -`;
     }
@@ -1264,15 +1498,15 @@
         }, 5600);
       }
       if (name === "lantern-wish") {
-        wishCounter.textContent = `${wishInput.value.length}/50자`;
+        wishCounter.textContent = translations[currentLang].char_count(wishInput.value.length, 50);
         setTimeout(() => wishInput.focus(), 250);
       }
       if (name === "lantern-name") {
-        visitorCounter.textContent = `${visitor.value.length}/10자`;
+        visitorCounter.textContent = translations[currentLang].char_count(visitor.value.length, 10);
         setTimeout(() => visitor.focus(), 250);
       }
       if (name === "lantern-password") {
-        passwordCounter.textContent = `${wishPassword.value.length}/4자`;
+        passwordCounter.textContent = translations[currentLang].char_count(wishPassword.value.length, 4);
         setTimeout(() => wishPassword.focus(), 250);
       }
       if (name === "meme-start") setTimeout(() => document.querySelector("#insightInput").focus(), 250);
@@ -1295,15 +1529,15 @@
     function currentWish() {
       return {
         id: "my-temp-id",
-        name: visitor.value.trim() || "김불자",
-        text: wishInput.value.trim() || "가족이 평안하기를 바랍니다.",
+        name: visitor.value.trim() || (currentLang === "ko" ? "김불자" : "Devotee"),
+        text: wishInput.value.trim() || (currentLang === "ko" ? "가족이 평안하기를 바랍니다." : "May my family find peace and happiness."),
         password: wishPassword.value.trim() || ""
       };
     }
 
     function updateLanternCount() {
       const count = wishes.length;
-      lanternCount.innerHTML = `지금까지 <strong>${count.toLocaleString("ko-KR")}개</strong>의 연등이 켜졌습니다.<br>연등은 좌우로 넘겨 둘러볼 수 있습니다.`;
+      lanternCount.innerHTML = translations[currentLang].lantern_subtitle(count);
     }
 
     async function loadStoredWishes() {
@@ -1343,10 +1577,27 @@
       renderLanterns(skyStrip, true);
     }
 
+    // 소원 내용 및 작성자명을 한국어/영어 더미데이터에 대응하여 동적으로 반환
+    function getWishDisplayName(wish) {
+      if (String(wish.id).startsWith("mock-")) {
+        const matched = (currentLang === "ko" ? wishesKO : wishesEN).find(w => w.id === wish.id);
+        return matched ? matched.name : wish.name;
+      }
+      return wish.name;
+    }
+
+    function getWishDisplayText(wish) {
+      if (String(wish.id).startsWith("mock-")) {
+        const matched = (currentLang === "ko" ? wishesKO : wishesEN).find(w => w.id === wish.id);
+        return matched ? matched.text : wish.text;
+      }
+      return wish.text;
+    }
+
     function renderLanterns(target, includeMine) {
       const query = wishSearch.value.trim();
       const base = includeMine ? wishes : [...wishes, (mySavedWish || currentWish()), ...wishes];
-      const pool = base.filter((wish) => !query || wish.name.includes(query));
+      const pool = base.filter((wish) => !query || getWishDisplayName(wish).includes(query));
       const scroller = target.closest(".endless");
       if (scroller) delete scroller.dataset.ready;
       target.innerHTML = "";
@@ -1390,8 +1641,9 @@
       document.querySelector("#wishEditMode").style.display = "none";
       document.querySelector("#wishDeleteMode").style.display = "none";
 
-      wishName.textContent = `${wish.name}님의 연등`;
-      wishText.textContent = wish.text;
+      const suffix = currentLang === "ko" ? translations.ko.anon_lantern : translations.en.anon_lantern;
+      wishName.textContent = `${getWishDisplayName(wish)}${suffix}`;
+      wishText.textContent = getWishDisplayText(wish);
       wishDialog.showModal();
     }
 
@@ -1399,8 +1651,8 @@
       document.querySelector("#wishViewMode").style.display = "none";
       document.querySelector("#wishEditMode").style.display = "flex";
       const editWishInput = document.querySelector("#editWishInput");
-      editWishInput.value = activeDialogWish.text;
-      document.querySelector("#editWishCounter").textContent = `${editWishInput.value.length}/50자`;
+      editWishInput.value = getWishDisplayText(activeDialogWish);
+      document.querySelector("#editWishCounter").textContent = translations[currentLang].char_count(editWishInput.value.length, 50);
       document.querySelector("#editPasswordInput").value = "";
       setTimeout(() => editWishInput.focus(), 150);
     });
@@ -1424,13 +1676,13 @@
     });
 
     document.querySelector("#editWishInput").addEventListener("input", (e) => {
-      document.querySelector("#editWishCounter").textContent = `${e.target.value.length}/50자`;
+      document.querySelector("#editWishCounter").textContent = translations[currentLang].char_count(e.target.value.length, 50);
     });
 
     document.querySelector("#btnSubmitDelete").addEventListener("click", async () => {
       const passwordInput = document.querySelector("#deletePasswordInput").value.trim();
       if (passwordInput.length !== 4) {
-        showToast("비밀번호 4자리를 모두 입력하세요.");
+        showToast(translations[currentLang].toast_pw_all);
         return;
       }
       
@@ -1450,7 +1702,7 @@
 
         refreshAllLanternViews();
         wishDialog.close();
-        showToast("연등이 삭제되었습니다.");
+        showToast(translations[currentLang].toast_delete_success);
         return;
       }
 
@@ -1468,7 +1720,7 @@
         .eq("id", targetId);
 
       if (error) {
-        showToast(`삭제 실패: ${error.message || "비밀번호 오류"}`);
+        showToast(`${translations[currentLang].toast_delete_failed}${error.message || translations[currentLang].pw_error}`);
         console.error("Supabase Delete Error:", error);
       } else {
         const idx = wishes.findIndex(w => w.id === targetId || w === activeDialogWish);
@@ -1483,7 +1735,7 @@
 
         refreshAllLanternViews();
         wishDialog.close();
-        showToast("연등 소원이 삭제되었습니다.");
+        showToast(translations[currentLang].toast_delete_success);
       }
     });
 
@@ -1492,11 +1744,11 @@
       const newText = document.querySelector("#editWishInput").value.trim();
 
       if (!newText) {
-        showToast("수정할 소원을 작성해 주세요.");
+        showToast(translations[currentLang].toast_edit_write);
         return;
       }
       if (passwordInput.length !== 4) {
-        showToast("비밀번호 4자리를 모두 입력하세요.");
+        showToast(translations[currentLang].toast_pw_all);
         return;
       }
 
@@ -1512,7 +1764,7 @@
 
         refreshAllLanternViews();
         wishDialog.close();
-        showToast("소원이 성공적으로 수정되었습니다.");
+        showToast(translations[currentLang].toast_edit_success);
         return;
       }
 
@@ -1530,7 +1782,7 @@
         .eq("id", targetId);
 
       if (error) {
-        showToast(`수정 실패: ${error.message || "비밀번호 오류"}`);
+        showToast(`${translations[currentLang].toast_edit_failed}${error.message || translations[currentLang].pw_error}`);
         console.error("Supabase Update Error:", error);
       } else {
         activeDialogWish.text = newText;
@@ -1541,7 +1793,7 @@
 
         refreshAllLanternViews();
         wishDialog.close();
-        showToast("소원이 성공적으로 수정되었습니다.");
+        showToast(translations[currentLang].toast_edit_success);
       }
     });
 
@@ -1557,7 +1809,7 @@
       watermark.style.zIndex = "9999";
       
       watermark.innerHTML = `
-        <div style="font-family: 'Seokbo', serif; font-size: 11px; margin-bottom: 4px; color: rgba(255, 255, 255, 0.65); letter-spacing: 0.15em;">부처님오신날 - 번뇌금지</div>
+        <div style="font-family: 'Seokbo', serif; font-size: 11px; margin-bottom: 4px; color: rgba(255, 255, 255, 0.65); letter-spacing: 0.15em;">${translations[currentLang].watermark_title}</div>
         <div style="font-family: 'BuddhaUI', sans-serif; font-size: 10px; color: rgba(255, 255, 255, 0.4); letter-spacing: 0.06em;">https://bit.ly/buddha_birth</div>
       `;
       phoneEl.appendChild(watermark);
@@ -1594,11 +1846,11 @@
 
     async function share(kind) {
       const titles = {
-        dharma: "오늘의 한 말씀 공유",
-        lantern: "나의 연등 공유",
-        meme: "깨달음 공유"
+        dharma: currentLang === "ko" ? "오늘의 한 말씀 공유" : "Share Today's Wisdom",
+        lantern: currentLang === "ko" ? "나의 연등 공유" : "Share My Lantern",
+        meme: currentLang === "ko" ? "깨달음 공유" : "Share Realization"
       };
-      shareDialogTitle.textContent = titles[kind] || "마음 공유하기";
+      shareDialogTitle.textContent = titles[kind] || (currentLang === "ko" ? "마음 공유하기" : "Share Your Mind");
       sharePreview.removeAttribute("src");
       
       const screenshotUrl = await makeSharePreview(kind);
@@ -1644,9 +1896,9 @@
       tempInput.select();
       try {
         document.execCommand("copy");
-        showToast("공유 링크가 복사되었습니다.");
+        showToast(translations[currentLang].toast_link_copy);
       } catch (err) {
-        showToast("링크 복사 실패. 다시 시도해 주세요.");
+        showToast(translations[currentLang].toast_link_failed);
       }
       document.body.removeChild(tempInput);
     }
@@ -1662,7 +1914,6 @@
       phone.classList.add("sounding");
     }
 
-    // 사운드 재생 멈추기
     function stopLoop(type) {
       const audio = soundPlayers[type];
       if (!audio) return;
@@ -1684,7 +1935,7 @@
       startDefaultSound(event);
       const flow = event.target.closest(".menu-button[data-flow]")?.dataset.flow;
       if (flow) {
-        if (flow === "dharma") setQuote();
+        if (flow === "dharma") renderWisdomQuote();
         show(`${flow}-start`);
         return;
       }
@@ -1695,7 +1946,7 @@
         if (current === "lantern-wish" && nextScene === "lantern-name") {
           const val = wishInput.value.trim();
           if (val.length < 1) {
-            showToast("소원을 입력해 주세요.");
+            showToast(translations[currentLang].toast_wish);
             return;
           }
         }
@@ -1703,7 +1954,7 @@
         if (current === "lantern-name" && nextScene === "lantern-password") {
           const val = visitor.value.trim();
           if (val.length < 1) {
-            showToast("이름을 입력해 주세요.");
+            showToast(translations[currentLang].toast_name);
             return;
           }
         }
@@ -1724,7 +1975,7 @@
     document.querySelector("#raiseLantern").addEventListener("click", async () => {
       const passwordVal = wishPassword.value.trim();
       if (passwordVal.length !== 4) {
-        showToast("비밀번호 4자리를 정확히 입력해 주세요.");
+        showToast(translations[currentLang].toast_pw_exactly);
         return;
       }
       const wish = currentWish();
@@ -1773,6 +2024,9 @@
     loadQuotes();
     loadStoredWishes();
     renderLanterns(lanternStrip, false);
+    
+    // 최종 초기화 시 자동 감지된 언어를 기반으로 사전 정렬을 진행합니다.
+    setLanguage(currentLang);
     show("intro");
   </script>
 </body>
