@@ -201,6 +201,11 @@
       line-height: 1.7;
       font-weight: 340;
     }
+    
+    .subtitle strong {
+      color: #fff;
+      font-weight: 700;
+    }
 
     .center {
       position: relative;
@@ -380,15 +385,6 @@
     .wish-lantern.small { flex-basis: 42px; height: 110px; margin-top: 16px; }
     .wish-lantern.lit { opacity: 1; filter: grayscale(.25) brightness(1.45) drop-shadow(0 0 16px rgba(255,255,255,.55)); }
     .wish-lantern.mine { flex-basis: 76px; height: 190px; animation: floatUp 7.8s ease-in-out infinite; }
-
-    .lantern-count {
-      position: relative;
-      z-index: 7;
-      margin-top: 8px;
-      color: rgba(255,255,255,.58);
-      font-size: 13px;
-      text-align: center;
-    }
 
     .lantern-actions {
       position: relative;
@@ -830,11 +826,11 @@
     <section class="scene" data-scene="lantern-start" data-flow="lantern">
       <div class="copy">
         <h1 class="title">당신의 소원을<br>연등에 담겠습니다.</h1>
-        <p class="subtitle">연등은 좌우로 넘겨 둘러볼 수 있습니다.</p>
+        <!-- "지금 5개의 연등이 켜졌습니다."가 서브타이틀 위치에 굵게(bold) 결합되어 렌더링됩니다 -->
+        <p class="subtitle" id="lanternCount">지금 <strong>0개</strong>의 연등이 켜졌습니다.<br>연등은 좌우로 넘겨 둘러볼 수 있습니다.</p>
       </div>
       <div class="lantern-scroll list-lit endless two-line"><div class="lantern-strip" id="lanternStrip"></div></div>
       <input class="search" id="wishSearch" type="search" placeholder="발원한 사람 이름으로 검색">
-      <p class="lantern-count" id="lanternCount">지금 5개의 연등이 켜졌습니다.</p>
       <div class="lantern-actions">
         <button class="nav-button" type="button" data-next="menu">이전</button>
         <button class="nav-button primary-action" type="button" data-next="lantern-wish">발원하기</button>
@@ -1073,7 +1069,8 @@
 
     function updateLanternCount() {
       const count = wishes.length;
-      lanternCount.textContent = `지금 ${count.toLocaleString("ko-KR")}개의 연등이 켜졌습니다.`;
+      // innerHTML을 사용해 N개 부분을 <strong> 태그로 감싸 굵게 표현하고, "연등은 좌우로 넘겨 둘러볼 수 있습니다" 문구를 하단에 결합합니다.
+      lanternCount.innerHTML = `지금 <strong>${count.toLocaleString("ko-KR")}개</strong>의 연등이 켜졌습니다.<br>연등은 좌우로 넘겨 둘러볼 수 있습니다.`;
     }
 
     async function loadStoredWishes() {
