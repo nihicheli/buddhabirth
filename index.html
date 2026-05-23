@@ -902,7 +902,7 @@
       </div>
       <p class="quote" id="dharmaQuote">마음이 흔들릴 때에는 붙잡지 말고 흔들림을 바라보십시오.</p>
       <p class="quote-source" id="dharmaSource">- 법구경 -</p>
-      <div class="bottom-nav">
+      <div class="bottom-nav" data-html2canvas-ignore>
         <button class="nav-button" type="button" data-next="menu">이전</button>
         <button class="pill" type="button" id="shareDharma">공유</button>
       </div>
@@ -914,8 +914,8 @@
         <p class="subtitle" id="lanternCount">지금까지 <strong>0개</strong>의 연등이 켜졌습니다.<br>좌우로 넘겨 소망을 살펴보세요.</p>
       </div>
       <div class="lantern-scroll list-lit endless two-line"><div class="lantern-strip" id="lanternStrip"></div></div>
-      <input class="search" id="wishSearch" type="search" placeholder="발원한 사람 이름으로 검색">
-      <div class="lantern-actions">
+      <input class="search" id="wishSearch" type="search" placeholder="발원한 사람 이름으로 검색" data-html2canvas-ignore>
+      <div class="lantern-actions" data-html2canvas-ignore>
         <button class="nav-button" type="button" data-next="menu">이전</button>
         <button class="nav-button primary-action" type="button" data-next="lantern-wish">발원하기</button>
         <span aria-hidden="true"></span>
@@ -930,7 +930,7 @@
         <textarea id="wishInput" rows="3" placeholder="가족이 평안하기를 바랍니다." maxlength="50"></textarea>
         <div class="char-counter" id="wishCounter">0/50자</div>
       </label>
-      <div class="bottom-nav">
+      <div class="bottom-nav" data-html2canvas-ignore>
         <button class="nav-button" type="button" data-next="lantern-start">이전</button>
         <button class="nav-button" type="button" data-next="lantern-name">다음</button>
       </div>
@@ -944,7 +944,7 @@
         <input id="visitor" type="text" placeholder="김불자" autocomplete="name" maxlength="10">
         <div class="char-counter" id="visitorCounter">0/10자</div>
       </label>
-      <div class="bottom-nav">
+      <div class="bottom-nav" data-html2canvas-ignore>
         <button class="nav-button" type="button" data-next="lantern-wish">이전</button>
         <button class="nav-button" type="button" data-next="lantern-password">다음</button>
       </div>
@@ -959,7 +959,7 @@
         <input id="wishPassword" type="password" inputmode="numeric" pattern="[0-9]*" placeholder="••••" maxlength="4">
         <div class="char-counter" id="passwordCounter">0/4자</div>
       </label>
-      <div class="bottom-nav">
+      <div class="bottom-nav" data-html2canvas-ignore>
         <button class="nav-button" type="button" data-next="lantern-name">이전</button>
         <button class="pill" type="button" id="raiseLantern">연등 띄우기</button>
       </div>
@@ -975,7 +975,7 @@
         <button class="mine-rise" type="button" id="myLanternButton" aria-label="내 연등 보기"></button>
         <div class="lantern-scroll endless"><div class="lantern-strip" id="skyStrip"></div></div>
       </div>
-      <div class="bottom-nav">
+      <div class="bottom-nav" data-html2canvas-ignore>
         <button class="nav-button" type="button" data-next="menu">처음</button>
         <button class="pill" type="button" id="shareLantern">공유</button>
       </div>
@@ -991,7 +991,7 @@
         <button class="sound-card" type="button" data-sound="moktak"><img src="assets/moktak.png" alt=""><span>목탁</span></button>
         <button class="sound-card" type="button" data-sound="bowl"><img src="assets/singing-bowl.png" alt=""><span>싱잉볼</span></button>
       </div>
-      <div class="bottom-nav">
+      <div class="bottom-nav" data-html2canvas-ignore>
         <button class="nav-button" type="button" data-next="menu">이전</button>
         <button class="nav-button" type="button" data-next="meme-start">깨닫다!</button>
       </div>
@@ -1006,13 +1006,13 @@
         <img class="bubble" src="assets/insight-bubble.png" alt="">
         <textarea class="bubble-text" id="insightInput" rows="3" placeholder="깨달음을 입력하세요" maxlength="40"></textarea>
       </div>
-      <div class="bottom-nav">
+      <div class="bottom-nav" data-html2canvas-ignore>
         <button class="nav-button" type="button" data-next="menu">이전</button>
         <button class="pill" type="button" id="shareMeme">공유</button>
       </div>
     </section>
 
-    <dialog id="wishDialog">
+    <dialog id="wishDialog" data-html2canvas-ignore>
       <div class="modal-body">
         
         <div id="wishViewMode" class="dialog-mode">
@@ -1053,7 +1053,7 @@
       </div>
     </dialog>
 
-    <dialog id="shareDialog">
+    <dialog id="shareDialog" data-html2canvas-ignore>
       <div class="modal-body">
         <h2 id="shareDialogTitle">마음 공유하기</h2>
         <img class="share-preview" id="sharePreview" alt="공유 이미지 미리보기">
@@ -1065,12 +1065,14 @@
       </div>
     </dialog>
 
-    <div class="toast" id="toast" aria-hidden="true">링크가 복사되었습니다.</div>
+    <div class="toast" id="toast" aria-hidden="true" data-html2canvas-ignore>링크가 복사되었습니다.</div>
 
     <div class="ash" aria-hidden="true"></div>
-    <div class="progress" aria-hidden="true"></div>
+    <div class="progress" aria-hidden="true" data-html2canvas-ignore></div>
   </main>
 
+  <!-- HTML 화면을 실시간 라이브 캡쳐해 이미지로 변환하기 위해 html2canvas 라이브러리 탑재 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="assets/buddhist_quotes.js"></script>
   <script>
@@ -1481,195 +1483,49 @@
       }
     });
 
-    function loadCanvasImage(src) {
-      return new Promise((resolve, reject) => {
-        const image = new Image();
-        image.onload = () => resolve(image);
-        image.onerror = reject;
-        image.src = src;
-      });
-    }
-
-    function drawFitImage(ctx, img, x, y, width, height, alignX = 0.5, alignY = 0.5) {
-      const imgWidth = img.naturalWidth || img.width;
-      const imgHeight = img.naturalHeight || img.height;
-      const imgRatio = imgWidth / imgHeight;
-      const targetRatio = width / height;
-
-      let drawWidth = width;
-      let drawHeight = height;
-      let drawX = x;
-      let drawY = y;
-
-      if (imgRatio > targetRatio) {
-        drawHeight = width / imgRatio;
-        drawY = y + (height - drawHeight) * alignY;
-      } else {
-        drawWidth = height * imgRatio;
-        drawX = x + (width - drawWidth) * alignX;
-      }
-
-      ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
-    }
-
-    function drawWrappedText(ctx, text, x, y, maxWidth, lineHeight, maxLines = 8) {
-      const words = String(text).replace(/\s+/g, " ").split(" ");
-      const lines = [];
-      let line = "";
-      words.forEach((word) => {
-        const test = line ? `${line} ${word}` : word;
-        if (ctx.measureText(test).width > maxWidth && line) {
-          lines.push(line);
-          line = word;
-        } else {
-          line = test;
-        }
-      });
-      if (line) lines.push(line);
-      lines.slice(0, maxLines).forEach((item, index) => {
-        ctx.fillText(item, x, y + index * lineHeight);
-      });
-    }
-
+    /* [신규 라이브 캡쳐 구현] 화면을 실시간 스크린샷 찍어 1:1 이미지로 획득하는 함수 */
     async function makeSharePreview(kind) {
+      const phoneEl = document.querySelector(".phone");
+      
+      // 1. 캡쳐본 이미지용 하단 단일 링크 워터마크 추가
+      const watermark = document.createElement("div");
+      watermark.style.position = "absolute";
+      watermark.style.bottom = "24px";
+      watermark.style.left = "0";
+      watermark.style.right = "0";
+      watermark.style.textAlign = "center";
+      watermark.style.fontFamily = "BuddhaUI, sans-serif";
+      watermark.style.fontSize = "12px";
+      watermark.style.color = "rgba(255, 255, 255, 0.45)";
+      watermark.style.letterSpacing = "0.08em";
+      watermark.style.zIndex = "9999";
+      watermark.innerText = "https://bit.ly/buddha_birth";
+      phoneEl.appendChild(watermark);
+
+      // 2. 텍스트 입력중이던 캐럿/아웃라인 노이즈 방지를 위해 포커스 해제
+      if (document.activeElement) {
+        document.activeElement.blur();
+      }
+
+      // 3. 라이브러리를 활용해 .phone 영역 고해상도로 캡쳐 진행 (CORS 지원 포함)
       try {
-        if (document.fonts && document.fonts.ready) {
-          await document.fonts.ready;
-        }
-      } catch (e) {
-        console.warn("Fonts not fully loaded:", e);
-      }
-
-      const canvas = document.createElement("canvas");
-      canvas.width = 900;
-      canvas.height = 1600;
-      const ctx = canvas.getContext("2d");
-
-      const bgGrad = ctx.createLinearGradient(0, 0, 0, canvas.height);
-      bgGrad.addColorStop(0, '#111111');
-      bgGrad.addColorStop(0.7, '#080808');
-      bgGrad.addColorStop(1, '#020202');
-      ctx.fillStyle = bgGrad;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      const radialGrad = ctx.createRadialGradient(450, 528, 0, 450, 528, 400);
-      radialGrad.addColorStop(0, 'rgba(255, 255, 255, 0.045)');
-      radialGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
-      ctx.fillStyle = radialGrad;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
-      for (let i = 0; i < 30; i++) {
-        const px = Math.random() * canvas.width;
-        const py = Math.random() * canvas.height;
-        const size = 1 + Math.random() * 2;
-        ctx.beginPath();
-        ctx.arc(px, py, size, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
-      ctx.textAlign = "center";
-      ctx.font = "32px Seokbo, serif";
-      ctx.fillText("부처님오신날", 450, 150);
-
-      ctx.fillStyle = "#ffffff";
-      ctx.font = "bold 68px BuddhaUI, sans-serif";
-      ctx.shadowColor = "rgba(255, 255, 255, 0.15)";
-      ctx.shadowBlur = 15;
-      ctx.fillText("번뇌금지", 450, 240);
-      ctx.shadowBlur = 0;
-
-      if (kind === "dharma") {
-        const buddha = await loadCanvasImage("assets/buddha-front-original.png");
-        ctx.globalAlpha = 0.35;
-        drawFitImage(ctx, buddha, 100, 550, 700, 950, 0.5, 1.0);
-        ctx.globalAlpha = 1.0;
-
-        ctx.fillStyle = "rgba(243, 242, 237, 0.68)";
-        ctx.font = "28px BuddhaUI, sans-serif";
-        ctx.fillText("오늘의 한 말씀", 450, 310);
-
-        const panelY = 440;
-        const panelH = 500;
-        ctx.strokeStyle = "rgba(243, 242, 237, 0.7)";
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.moveTo(80, panelY); ctx.lineTo(820, panelY);
-        ctx.moveTo(80, panelY + 6); ctx.lineTo(820, panelY + 6);
-        ctx.moveTo(80, panelY + panelH); ctx.lineTo(820, panelY + panelH);
-        ctx.moveTo(80, panelY + panelH - 6); ctx.lineTo(820, panelY + panelH - 6);
-        ctx.stroke();
-
-        ctx.fillStyle = "rgba(255, 255, 255, 0.9)";
-        ctx.font = "40px Seokbo, serif";
-        drawWrappedText(ctx, currentQuote.quote, 450, panelY + 140, 660, 68, 5);
-
-        ctx.fillStyle = "rgba(255, 255, 255, 0.52)";
-        ctx.font = "28px Seokbo, serif";
-        ctx.fillText(`- ${currentQuote.source} -`, 450, panelY + panelH - 80);
-      }
-
-      if (kind === "lantern") {
-        const buddha = await loadCanvasImage("assets/buddha-front-original.png");
-        ctx.globalAlpha = 0.25;
-        drawFitImage(ctx, buddha, 100, 650, 700, 850, 0.5, 1.0);
-        ctx.globalAlpha = 1.0;
-
-        const lantern = await loadCanvasImage("assets/lantern-original.png");
-        ctx.shadowColor = "rgba(255, 255, 255, 0.55)";
-        ctx.shadowBlur = 35;
-        drawFitImage(ctx, lantern, 340, 270, 220, 480, 0.5, 0.5);
-        ctx.shadowBlur = 0;
-
-        const panelY = 820;
-        const panelH = 460;
-        ctx.strokeStyle = "rgba(243, 242, 237, 0.7)";
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.moveTo(80, panelY); ctx.lineTo(820, panelY);
-        ctx.moveTo(80, panelY + 6); ctx.lineTo(820, panelY + 6);
-        ctx.moveTo(80, panelY + panelH); ctx.lineTo(820, panelY + panelH);
-        ctx.moveTo(80, panelY + panelH - 6); ctx.lineTo(820, panelY + panelH - 6);
-        ctx.stroke();
-
-        const wish = currentWish();
+        const canvas = await html2canvas(phoneEl, {
+          useCORS: true,
+          allowTaint: true,
+          backgroundColor: "#000000",
+          scale: 2, // 저장 시 완벽한 해상도를 위해 2배율 확대 캡쳐
+          logging: false
+        });
         
-        ctx.fillStyle = "#ffffff";
-        ctx.font = "bold 34px BuddhaUI, sans-serif";
-        ctx.fillText(`${wish.name}님의 소원 연등`, 450, panelY + 90);
-
-        ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
-        ctx.font = "34px Seokbo, serif";
-        drawWrappedText(ctx, wish.text, 450, panelY + 180, 660, 58, 4);
-      }
-
-      if (kind === "meme") {
-        const buddha = await loadCanvasImage("assets/buddha-front-original.png");
-        ctx.globalAlpha = 0.8;
-        drawFitImage(ctx, buddha, 150, 680, 600, 920, 0.5, 1.0);
-        ctx.globalAlpha = 1.0;
-
-        const bubble = await loadCanvasImage("assets/insight-bubble.png");
-        drawFitImage(ctx, bubble, 80, 280, 740, 480, 0.5, 0.5);
-
-        const insightText = document.querySelector("#insightInput").value.trim() || "깨달음을 얻었습니다.";
-        ctx.fillStyle = "#ffffff";
-        ctx.font = "bold 36px BuddhaUI, sans-serif";
-        ctx.shadowColor = "rgba(0, 0, 0, 0.6)";
-        ctx.shadowBlur = 8;
-        ctx.shadowOffsetY = 3;
-        drawWrappedText(ctx, insightText, 450, 480, 520, 60, 4);
+        // 4. 임시 생성한 하단 주소 워터마크 노출 제거
+        phoneEl.removeChild(watermark);
         
-        ctx.shadowBlur = 0;
-        ctx.shadowOffsetY = 0;
+        return canvas.toDataURL("image/png");
+      } catch (err) {
+        console.error("화면 캡쳐 중 오류가 발생했습니다:", err);
+        phoneEl.removeChild(watermark);
+        return "";
       }
-
-      ctx.fillStyle = "rgba(255, 255, 255, 0.42)";
-      ctx.font = "24px BuddhaUI, sans-serif";
-      ctx.fillText("https://bit.ly/buddha_birth", 450, 1520);
-
-      return canvas.toDataURL("image/png");
     }
 
     function showToast(message) {
@@ -1688,8 +1544,12 @@
       };
       shareDialogTitle.textContent = titles[kind] || "마음 공유하기";
       sharePreview.removeAttribute("src");
+      
+      // 다이얼로그 모달이 뜨기 직전 깨끗한 오리지널 화면을 스크린샷 캡쳐
+      const screenshotUrl = await makeSharePreview(kind);
+      sharePreview.src = screenshotUrl;
+      
       shareDialog.showModal();
-      sharePreview.src = await makeSharePreview(kind);
     }
 
     document.querySelector("#downloadImage").addEventListener("click", () => {
@@ -1776,7 +1636,6 @@
       if (nextBtn) {
         const nextScene = nextBtn.dataset.next;
         
-        // 소원 글자수 유효성 검증
         if (current === "lantern-wish" && nextScene === "lantern-name") {
           const val = wishInput.value.trim();
           if (val.length < 1) {
@@ -1785,7 +1644,6 @@
           }
         }
         
-        // 이름 글자수 유효성 검증
         if (current === "lantern-name" && nextScene === "lantern-password") {
           const val = visitor.value.trim();
           if (val.length < 1) {
@@ -1809,7 +1667,7 @@
         return;
       }
       const wish = currentWish();
-      mySavedWish = wish; // 발원 성공 시 원본 데이터 참조 기록
+      mySavedWish = wish;
       await saveWish(wish);
       show("lantern-sky");
     });
