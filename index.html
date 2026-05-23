@@ -750,17 +750,6 @@
       margin-top: 8px;
     }
 
-    .share-actions .pill {
-      width: 100%;
-      min-height: 44px;
-      border-radius: 999px;
-      font-weight: 700;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      transition: background-color 150ms ease, opacity 150ms ease;
-    }
-
     .share-actions .pill.primary {
       background: #f3f2ed;
       color: #050505;
@@ -917,7 +906,7 @@
       <input class="search" id="wishSearch" type="search" placeholder="발원한 사람 이름으로 검색" data-html2canvas-ignore>
       <div class="lantern-actions" data-html2canvas-ignore>
         <button class="nav-button" type="button" data-next="menu">이전</button>
-        <button class="nav-button primary-action" type="button" data-next="lantern-wish">발원하기</button>
+        <button class="nav-button" type="button" data-next="lantern-wish">발원하기</button>
         <span aria-hidden="true"></span>
       </div>
     </section>
@@ -967,7 +956,7 @@
 
     <section class="scene" data-scene="lantern-sky" data-flow="lantern">
       <div class="copy">
-        <h1 class="title">연등을<br>하늘로 띄우겠습니다.</h1>
+        <h1 class="title">연등을 하늘로<br>띄우겠습니다.</h1>
         <p class="subtitle">내 연등을 눌러보세요.</p>
       </div>
       <div class="sky-field">
@@ -975,9 +964,9 @@
         <button class="mine-rise" type="button" id="myLanternButton" aria-label="내 연등 보기"></button>
         <div class="lantern-scroll endless"><div class="lantern-strip" id="skyStrip"></div></div>
       </div>
-      <div class="bottom-nav" data-html2canvas-ignore>
-        <button class="nav-button" type="button" data-next="menu">처음</button>
-        <button class="pill" type="button" id="shareLantern">공유</button>
+      <!-- [수정] 하늘 씬의 공유 버튼을 완전 삭제하고 처음 화면 복귀 버튼을 가운데로 배치 -->
+      <div class="bottom-nav" data-html2canvas-ignore style="justify-content: center;">
+        <button class="nav-button" type="button" data-next="menu">처음 화면으로 돌아가기</button>
       </div>
     </section>
 
@@ -1015,14 +1004,23 @@
     <dialog id="wishDialog" data-html2canvas-ignore>
       <div class="modal-body">
         
+        <!-- [수정] 다이얼로그 연등 확인 뷰 구조 전면 개선 -->
         <div id="wishViewMode" class="dialog-mode">
           <h2 id="wishName">무명 불자님의 연등</h2>
           <p id="wishText" style="white-space: pre-wrap; word-break: break-all; margin: 15px 0; font-size: 14px; line-height: 1.85;">모두가 자기 마음을 미워하지 않기를 바랍니다.</p>
-          <div class="share-actions">
-            <button class="pill secondary" type="button" id="btnEditMode">수정</button>
-            <button class="pill secondary" type="button" id="btnDeleteMode" style="border-color: rgba(255,107,107,0.3); color: #ff6b6b;">삭제</button>
+          
+          <!-- 닫기 버튼과 공유 버튼을 나란히 1:1로 정렬하여 배치 -->
+          <div class="share-actions" style="margin-top: 8px;">
+            <button class="pill primary" type="button" id="closeWish" style="width: 100%;">닫기</button>
+            <button class="pill secondary" type="button" id="shareLantern" style="width: 100%;">공유</button>
           </div>
-          <button class="pill primary" type="button" id="closeWish" style="width:100%; margin-top:8px;">닫기</button>
+
+          <!-- 수정 및 삭제 액션은 소원 내용 박스 아래 점선 구분선 뒤로 분리하여 차분하게 배치 -->
+          <div style="margin-top: 18px; padding-top: 12px; border-top: 1px dashed rgba(255,255,255,0.12); display: flex; justify-content: center; gap: 20px;">
+            <button class="nav-button" type="button" id="btnEditMode" style="color: rgba(255,255,255,0.5); text-decoration: none;">소원 수정</button>
+            <span style="color: rgba(255,255,255,0.15); font-size: 11px;">|</span>
+            <button class="nav-button" type="button" id="btnDeleteMode" style="color: rgba(255,107,107,0.6); text-decoration: none;">소원 삭제</button>
+          </div>
         </div>
 
         <div id="wishEditMode" class="dialog-mode" style="display: none;">
@@ -1255,7 +1253,7 @@
 
     function updateLanternCount() {
       const count = wishes.length;
-      lanternCount.innerHTML = `지금 <strong>${count.toLocaleString("ko-KR")}개</strong>의 연등이 켜졌습니다.<br>연등은 좌우로 넘겨 둘러볼 수 있습니다.`;
+      lanternCount.innerHTML = `지금까지 <strong>${count.toLocaleString("ko-KR")}개</strong>의 연등이 켜졌습니다.<br>연등은 좌우로 넘겨 둘러볼 수 있습니다.`;
     }
 
     async function loadStoredWishes() {
@@ -1406,14 +1404,20 @@
         return;
       }
 
-      const { error } = await wishDb
+      const tempClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        global: {
+          headers: {
+            "x-wish-password": passwordInput
+          }
+        }
+      });
+
+      const { error } = await tempClient
         .from("wishes")
         .delete()
-        .eq("id", targetId)
-        .headers({ "x-wish-password": passwordInput });
+        .eq("id", targetId);
 
       if (error) {
-        // 상세 에러 메시지를 토스트와 콘솔에 출력하여 디버깅을 유도합니다.
         showToast(`삭제 실패: ${error.message || "비밀번호 오류"}`);
         console.error("Supabase Delete Error:", error);
       } else {
@@ -1462,14 +1466,20 @@
         return;
       }
 
-      const { error } = await wishDb
+      const tempClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        global: {
+          headers: {
+            "x-wish-password": passwordInput
+          }
+        }
+      });
+
+      const { error } = await tempClient
         .from("wishes")
         .update({ wish: newText })
-        .eq("id", targetId)
-        .headers({ "x-wish-password": passwordInput });
+        .eq("id", targetId);
 
       if (error) {
-        // 상세 에러 메시지를 토스트와 콘솔에 출력하여 디버깅을 유도합니다.
         showToast(`수정 실패: ${error.message || "비밀번호 오류"}`);
         console.error("Supabase Update Error:", error);
       } else {
@@ -1485,11 +1495,9 @@
       }
     });
 
-    /* [신규 라이브 캡쳐 구현] 화면을 실시간 스크린샷 찍어 1:1 이미지로 획득하는 함수 */
     async function makeSharePreview(kind) {
       const phoneEl = document.querySelector(".phone");
       
-      // 1. 캡쳐본 이미지용 하단 단일 링크 워터마크 추가
       const watermark = document.createElement("div");
       watermark.style.position = "absolute";
       watermark.style.bottom = "24px";
@@ -1504,24 +1512,20 @@
       watermark.innerText = "https://bit.ly/buddha_birth";
       phoneEl.appendChild(watermark);
 
-      // 2. 텍스트 입력중이던 캐럿/아웃라인 노이즈 방지를 위해 포커스 해제
       if (document.activeElement) {
         document.activeElement.blur();
       }
 
-      // 3. 라이브러리를 활용해 .phone 영역 고해상도로 캡쳐 진행 (CORS 지원 포함)
       try {
         const canvas = await html2canvas(phoneEl, {
           useCORS: true,
           allowTaint: true,
           backgroundColor: "#000000",
-          scale: 2, // 저장 시 완벽한 해상도를 위해 2배율 확대 캡쳐
+          scale: 2, 
           logging: false
         });
         
-        // 4. 임시 생성한 하단 주소 워터마크 노출 제거
         phoneEl.removeChild(watermark);
-        
         return canvas.toDataURL("image/png");
       } catch (err) {
         console.error("화면 캡쳐 중 오류가 발생했습니다:", err);
@@ -1547,7 +1551,6 @@
       shareDialogTitle.textContent = titles[kind] || "마음 공유하기";
       sharePreview.removeAttribute("src");
       
-      // 다이얼로그 모달이 뜨기 직전 깨끗한 오리지널 화면을 스크린샷 캡쳐
       const screenshotUrl = await makeSharePreview(kind);
       sharePreview.src = screenshotUrl;
       
@@ -1641,7 +1644,7 @@
         if (current === "lantern-wish" && nextScene === "lantern-name") {
           const val = wishInput.value.trim();
           if (val.length < 1) {
-            showToast("소원을 1자 이상 입력해 주세요.");
+            showToast("소원을 입력해 주세요.");
             return;
           }
         }
@@ -1649,7 +1652,7 @@
         if (current === "lantern-name" && nextScene === "lantern-password") {
           const val = visitor.value.trim();
           if (val.length < 1) {
-            showToast("이름을 1자 이상 입력해 주세요.");
+            showToast("이름을 입력해 주세요.");
             return;
           }
         }
@@ -1659,7 +1662,13 @@
     });
 
     document.querySelector("#shareDharma").addEventListener("click", () => share("dharma"));
-    document.querySelector("#shareLantern").addEventListener("click", () => share("lantern"));
+    
+    // [수정] 다이얼로그 안의 공유 버튼 클릭 시, 다이얼로그를 먼저 닫아 캡쳐 화면을 깨끗하게 만든 뒤 공유 팝업 오픈
+    document.querySelector("#shareLantern").addEventListener("click", () => {
+      wishDialog.close();
+      share("lantern");
+    });
+
     document.querySelector("#shareMeme").addEventListener("click", () => share("meme"));
     
     document.querySelector("#raiseLantern").addEventListener("click", async () => {
