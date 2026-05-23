@@ -1112,6 +1112,7 @@
     const toast = document.querySelector("#toast");
 
     let activeDialogWish = null;
+    let mySavedWish = null; // 사용자가 발원 완료하여 생성한 원본 연등 데이터 추적용 변수
     
     let current = "intro";
     let introFace = "side";
@@ -1287,9 +1288,14 @@
       }
     }
 
+    function refreshAllLanternViews() {
+      renderLanterns(lanternStrip, false);
+      renderLanterns(skyStrip, true);
+    }
+
     function renderLanterns(target, includeMine) {
       const query = wishSearch.value.trim();
-      const base = includeMine ? wishes : [...wishes, currentWish(), ...wishes];
+      const base = includeMine ? wishes : [...wishes, (mySavedWish || currentWish()), ...wishes];
       const pool = base.filter((wish) => !query || wish.name.includes(query));
       const scroller = target.closest(".endless");
       if (scroller) delete scroller.dataset.ready;
@@ -1382,10 +1388,17 @@
       const targetId = activeDialogWish.id;
 
       if (!wishDb || String(targetId).startsWith("mock-") || targetId === "my-temp-id") {
-        const idx = wishes.findIndex(w => w.id === targetId);
+        const idx = wishes.findIndex(w => w.id === targetId || w === activeDialogWish);
         if (idx > -1) wishes.splice(idx, 1);
-        updateLanternCount();
-        renderLanterns(lanternStrip, false);
+        
+        if (activeDialogWish === mySavedWish) {
+          mySavedWish = null;
+          wishInput.value = "";
+          visitor.value = "";
+          wishPassword.value = "";
+        }
+
+        refreshAllLanternViews();
         wishDialog.close();
         showToast("연등이 삭제되었습니다.");
         return;
@@ -1401,10 +1414,17 @@
         showToast("비밀번호가 일치하지 않습니다.");
         console.error(error);
       } else {
-        const idx = wishes.findIndex(w => w.id === targetId);
+        const idx = wishes.findIndex(w => w.id === targetId || w === activeDialogWish);
         if (idx > -1) wishes.splice(idx, 1);
-        updateLanternCount();
-        renderLanterns(lanternStrip, false);
+
+        if (activeDialogWish === mySavedWish) {
+          mySavedWish = null;
+          wishInput.value = "";
+          visitor.value = "";
+          wishPassword.value = "";
+        }
+
+        refreshAllLanternViews();
         wishDialog.close();
         showToast("연등 소원이 삭제되었습니다.");
       }
@@ -1428,7 +1448,12 @@
 
       if (!wishDb || String(targetId).startsWith("mock-") || targetId === "my-temp-id") {
         activeDialogWish.text = newText;
-        renderLanterns(lanternStrip, false);
+        
+        if (activeDialogWish === mySavedWish) {
+          wishInput.value = newText;
+        }
+
+        refreshAllLanternViews();
         wishDialog.close();
         showToast("소원이 성공적으로 수정되었습니다.");
         return;
@@ -1446,12 +1471,11 @@
       } else {
         activeDialogWish.text = newText;
         
-        const myWish = currentWish();
-        if (activeDialogWish.name === myWish.name) {
+        if (activeDialogWish === mySavedWish) {
           wishInput.value = newText;
         }
 
-        renderLanterns(lanternStrip, false);
+        refreshAllLanternViews();
         wishDialog.close();
         showToast("소원이 성공적으로 수정되었습니다.");
       }
@@ -1466,7 +1490,6 @@
       });
     }
 
-    /* 이미지 종횡비 유지 그리기 도우미 함수 (Contain 모드) */
     function drawFitImage(ctx, img, x, y, width, height, alignX = 0.5, alignY = 0.5) {
       const imgWidth = img.naturalWidth || img.width;
       const imgHeight = img.naturalHeight || img.height;
@@ -1509,7 +1532,6 @@
     }
 
     async function makeSharePreview(kind) {
-      // 폰트 완전 로드 대기
       try {
         if (document.fonts && document.fonts.ready) {
           await document.fonts.ready;
@@ -1523,7 +1545,6 @@
       canvas.height = 1600;
       const ctx = canvas.getContext("2d");
 
-      // 화면과 일관된 우아한 어두운 그라디언트 배경 드로잉
       const bgGrad = ctx.createLinearGradient(0, 0, 0, canvas.height);
       bgGrad.addColorStop(0, '#111111');
       bgGrad.addColorStop(0.7, '#080808');
@@ -1537,7 +1558,6 @@
       ctx.fillStyle = radialGrad;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // 화면의 고유한 별무리/별가루 디테일 캔버스 수놓기
       ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
       for (let i = 0; i < 30; i++) {
         const px = Math.random() * canvas.width;
@@ -1570,7 +1590,6 @@
         ctx.font = "28px BuddhaUI, sans-serif";
         ctx.fillText("오늘의 한 말씀", 450, 310);
 
-        // 더블 보더 디자인 수평 판넬 드로잉
         const panelY = 440;
         const panelH = 500;
         ctx.strokeStyle = "rgba(243, 242, 237, 0.7)";
@@ -1603,7 +1622,6 @@
         drawFitImage(ctx, lantern, 340, 270, 220, 480, 0.5, 0.5);
         ctx.shadowBlur = 0;
 
-        // 발원 소원 보더 드로잉
         const panelY = 820;
         const panelH = 460;
         ctx.strokeStyle = "rgba(243, 242, 237, 0.7)";
@@ -1647,7 +1665,6 @@
         ctx.shadowOffsetY = 0;
       }
 
-      // 지정된 통합 URL 워터마크 표시
       ctx.fillStyle = "rgba(255, 255, 255, 0.42)";
       ctx.font = "24px BuddhaUI, sans-serif";
       ctx.fillText("https://bit.ly/buddha_birth", 450, 1520);
@@ -1755,8 +1772,30 @@
         show(`${flow}-start`);
         return;
       }
-      const next = event.target.closest("[data-next]")?.dataset.next;
-      if (next) show(next);
+      const nextBtn = event.target.closest("[data-next]");
+      if (nextBtn) {
+        const nextScene = nextBtn.dataset.next;
+        
+        // 소원 글자수 유효성 검증
+        if (current === "lantern-wish" && nextScene === "lantern-name") {
+          const val = wishInput.value.trim();
+          if (val.length < 1) {
+            showToast("소원을 1자 이상 입력해 주세요.");
+            return;
+          }
+        }
+        
+        // 이름 글자수 유효성 검증
+        if (current === "lantern-name" && nextScene === "lantern-password") {
+          const val = visitor.value.trim();
+          if (val.length < 1) {
+            showToast("이름을 1자 이상 입력해 주세요.");
+            return;
+          }
+        }
+        
+        show(nextScene);
+      }
     });
 
     document.querySelector("#shareDharma").addEventListener("click", () => share("dharma"));
@@ -1770,11 +1809,18 @@
         return;
       }
       const wish = currentWish();
+      mySavedWish = wish; // 발원 성공 시 원본 데이터 참조 기록
       await saveWish(wish);
       show("lantern-sky");
     });
     
-    document.querySelector("#myLanternButton").addEventListener("click", () => openWish(currentWish()));
+    document.querySelector("#myLanternButton").addEventListener("click", () => {
+      if (mySavedWish) {
+        openWish(mySavedWish);
+      } else {
+        openWish(currentWish());
+      }
+    });
     document.querySelector("#closeWish").addEventListener("click", () => wishDialog.close());
     document.querySelector("#closeShare").addEventListener("click", () => shareDialog.close());
     wishSearch.addEventListener("input", () => renderLanterns(lanternStrip, false));
