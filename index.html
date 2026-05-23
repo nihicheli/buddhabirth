@@ -704,24 +704,27 @@
       text-shadow: 0 2px 0 rgba(0,0,0,.25);
     }
 
-    /* [개선] 캡처 환경(html2canvas) 및 디스플레이 전반에서 소원 다이얼로그가 정확히 중앙에 오도록 절대 배치를 고정하고, 겹침 비침을 원천 차단하기 위해 100% 완전 불투명한 전통 먹색 단일 배경을 부여합니다. */
-    dialog {
+    /* [개선] 캡처 환경(html2canvas) 및 디바이스 전반에서 완벽하게 상자가 캡처 가로/세로 정중앙에 배치되도록 커스텀 오버레이 모달 구조로 전면 개편합니다. */
+    .modal-overlay {
       position: absolute !important;
-      top: 50% !important;
-      left: 50% !important;
-      transform: translate(-50%, -50%) !important;
-      margin: 0 !important;
-      width: min(320px, calc(100vw - 56px));
-      border: 1px solid rgba(255, 255, 255, 0.22);
-      background: #0e0e0d !important; /* 투명도 0%의 완전 불투명 깊은 먹색 배경 */
-      color: var(--ink);
-      padding: 0;
-      border-radius: 16px;
-      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.9);
-      z-index: 9999;
+      inset: 0 !important;
+      background: rgba(0, 0, 0, 0.65) !important; /* 바깥 어두운 배경처리 */
+      display: none; /* 기본 숨김, JS 패치로 켬 */
+      place-items: center !important;
+      padding: 24px !important;
+      z-index: 9999 !important;
     }
 
-    dialog::backdrop { background: rgba(0,0,0,.54); }
+    .modal-card {
+      width: 100% !important;
+      max-width: 320px !important;
+      border: 1px solid rgba(255, 255, 255, 0.22) !important;
+      background: #0e0e0d !important; /* 투명도 0% 완벽한 불투명 칠흑색 */
+      color: var(--ink) !important;
+      border-radius: 16px !important;
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.9) !important;
+      overflow: hidden !important;
+    }
 
     .modal-body {
       padding: 24px 22px;
@@ -1018,64 +1021,70 @@
       </div>
     </section>
 
-    <dialog id="wishDialog">
-      <div class="modal-body">
-        
-        <div id="wishViewMode" class="dialog-mode">
-          <h2 id="wishName">무명 불자님의 연등</h2>
-          <p id="wishText" style="white-space: pre-wrap; word-break: break-all; margin: 18px 0; font-size: 14px; line-height: 1.9; color: rgba(243, 242, 237, 0.9);">모두가 자기 마음을 미워하지 않기를 바랍니다.</p>
+    <!-- [수정] 좌표 계산 오류를 내던 dialog 엘리먼트를 div 커스텀 정렬 오버레이 구조로 고도화 -->
+    <div id="wishDialog" class="modal-overlay">
+      <div class="modal-card">
+        <div class="modal-body">
           
-          <div class="share-actions" style="margin-top: 8px;" data-html2canvas-ignore>
-            <button class="pill primary" type="button" id="closeWish" style="width: 100%;">닫기</button>
-            <button class="pill secondary" type="button" id="shareLantern" style="width: 100%;">공유</button>
+          <div id="wishViewMode" class="dialog-mode">
+            <h2 id="wishName">무명 불자님의 연등</h2>
+            <p id="wishText" style="white-space: pre-wrap; word-break: break-all; margin: 18px 0; font-size: 14px; line-height: 1.9; color: rgba(243, 242, 237, 0.9);">모두가 자기 마음을 미워하지 않기를 바랍니다.</p>
+            
+            <div class="share-actions" style="margin-top: 8px;" data-html2canvas-ignore>
+              <button class="pill primary" type="button" id="closeWish" style="width: 100%;">닫기</button>
+              <button class="pill secondary" type="button" id="shareLantern" style="width: 100%;">공유</button>
+            </div>
+
+            <div style="margin-top: 18px; padding-top: 12px; border-top: 1px dashed rgba(255,255,255,0.12); display: flex; justify-content: center; gap: 20px;" data-html2canvas-ignore>
+              <button class="nav-button" type="button" id="btnEditMode" style="color: rgba(255,255,255,0.5); text-decoration: none;">소원 수정</button>
+              <span style="color: rgba(255,255,255,0.15); font-size: 11px;">|</span>
+              <button class="nav-button" type="button" id="btnDeleteMode" style="color: rgba(255,107,107,0.6); text-decoration: none;">소원 삭제</button>
+            </div>
           </div>
 
-          <div style="margin-top: 18px; padding-top: 12px; border-top: 1px dashed rgba(255,255,255,0.12); display: flex; justify-content: center; gap: 20px;" data-html2canvas-ignore>
-            <button class="nav-button" type="button" id="btnEditMode" style="color: rgba(255,255,255,0.5); text-decoration: none;">소원 수정</button>
-            <span style="color: rgba(255,255,255,0.15); font-size: 11px;">|</span>
-            <button class="nav-button" type="button" id="btnDeleteMode" style="color: rgba(255,107,107,0.6); text-decoration: none;">소원 삭제</button>
+          <div id="wishEditMode" class="dialog-mode" style="display: none;">
+            <h2>소원 수정하기</h2>
+            <textarea id="editWishInput" rows="3" placeholder="가족이 평안하기를 바랍니다." maxlength="50" style="border: 1px solid rgba(255,255,255,0.18); padding: 12px; border-radius: 8px; background: rgba(0,0,0,0.3); text-align: center; font-size: 14px; width: 100%;"></textarea>
+            <div class="char-counter" id="editWishCounter" style="margin-top: -8px;">0/50자</div>
+            
+            <input id="editPasswordInput" type="password" inputmode="numeric" pattern="[0-9]*" placeholder="설정한 비밀번호 4자리" maxlength="4" style="border-bottom: 1px solid rgba(255,255,255,0.2); font-size:16px; padding: 6px 0; text-align: center;">
+            
+            <div class="share-actions">
+              <button class="pill primary" type="button" id="btnSubmitEdit">수정 완료</button>
+              <button class="pill secondary" type="button" id="btnCancelEdit">취소</button>
+            </div>
           </div>
+
+          <div id="wishDeleteMode" class="dialog-mode" style="display: none;">
+            <h2 style="color: #ff6b6b;">소원 삭제하기</h2>
+            <p style="font-size: 13px; color: rgba(255,255,255,.7); line-height: 1.6; margin: 5px 0;">이 연등 소원을 완전히 삭제하시겠습니까?<br>등록 시 설정한 4자리 비밀번호를 입력해 주세요.</p>
+            
+            <input id="deletePasswordInput" type="password" inputmode="numeric" pattern="[0-9]*" placeholder="설정한 비밀번호 4자리" maxlength="4" style="border-bottom: 1px solid rgba(255,255,255,0.2); font-size:16px; padding: 6px 0; text-align: center; margin-bottom: 10px;">
+            
+            <div class="share-actions">
+              <button class="pill primary" type="button" id="btnSubmitDelete" style="background: #ff6b6b; color: #fff; border-color: #ff6b6b;">삭제하기</button>
+              <button class="pill secondary" type="button" id="btnCancelDelete">취소</button>
+            </div>
+          </div>
+
         </div>
-
-        <div id="wishEditMode" class="dialog-mode" style="display: none;">
-          <h2>소원 수정하기</h2>
-          <textarea id="editWishInput" rows="3" placeholder="가족이 평안하기를 바랍니다." maxlength="50" style="border: 1px solid rgba(255,255,255,0.18); padding: 12px; border-radius: 8px; background: rgba(0,0,0,0.3); text-align: center; font-size: 14px; width: 100%;"></textarea>
-          <div class="char-counter" id="editWishCounter" style="margin-top: -8px;">0/50자</div>
-          
-          <input id="editPasswordInput" type="password" inputmode="numeric" pattern="[0-9]*" placeholder="설정한 비밀번호 4자리" maxlength="4" style="border-bottom: 1px solid rgba(255,255,255,0.2); font-size:16px; padding: 6px 0; text-align: center;">
-          
-          <div class="share-actions">
-            <button class="pill primary" type="button" id="btnSubmitEdit">수정 완료</button>
-            <button class="pill secondary" type="button" id="btnCancelEdit">취소</button>
-          </div>
-        </div>
-
-        <div id="wishDeleteMode" class="dialog-mode" style="display: none;">
-          <h2 style="color: #ff6b6b;">소원 삭제하기</h2>
-          <p style="font-size: 13px; color: rgba(255,255,255,.7); line-height: 1.6; margin: 5px 0;">이 연등 소원을 완전히 삭제하시겠습니까?<br>등록 시 설정한 4자리 비밀번호를 입력해 주세요.</p>
-          
-          <input id="deletePasswordInput" type="password" inputmode="numeric" pattern="[0-9]*" placeholder="설정한 비밀번호 4자리" maxlength="4" style="border-bottom: 1px solid rgba(255,255,255,0.2); font-size:16px; padding: 6px 0; text-align: center; margin-bottom: 10px;">
-          
-          <div class="share-actions">
-            <button class="pill primary" type="button" id="btnSubmitDelete" style="background: #ff6b6b; color: #fff; border-color: #ff6b6b;">삭제하기</button>
-            <button class="pill secondary" type="button" id="btnCancelDelete">취소</button>
-          </div>
-        </div>
-
       </div>
-    </dialog>
+    </div>
 
-    <dialog id="shareDialog" data-html2canvas-ignore>
-      <div class="modal-body">
-        <h2 id="shareDialogTitle">마음 공유하기</h2>
-        <img class="share-preview" id="sharePreview" alt="공유 이미지 미리보기">
-        <div class="share-actions">
-          <button class="pill primary" type="button" id="downloadImage">사진 저장</button>
-          <button class="pill secondary" type="button" id="copyShareLink">링크 공유</button>
+    <!-- [수정] 공유 모달도 동일하게 레이아웃 계산오류 방지를 위해 Div 오버레이 구조로 개선 -->
+    <div id="shareDialog" class="modal-overlay" data-html2canvas-ignore>
+      <div class="modal-card">
+        <div class="modal-body">
+          <h2 id="shareDialogTitle">마음 공유하기</h2>
+          <img class="share-preview" id="sharePreview" alt="공유 이미지 미리보기">
+          <div class="share-actions">
+            <button class="pill primary" type="button" id="downloadImage">사진 저장</button>
+            <button class="pill secondary" type="button" id="copyShareLink">링크 공유</button>
+          </div>
+          <button class="nav-button" type="button" id="closeShare" style="margin-top: 6px; display: inline-block;">닫기</button>
         </div>
-        <button class="nav-button" type="button" id="closeShare" style="margin-top: 6px; display: inline-block;">닫기</button>
       </div>
-    </dialog>
+    </div>
 
     <div class="toast" id="toast" aria-hidden="true" data-html2canvas-ignore>링크가 복사되었습니다.</div>
 
@@ -1137,6 +1146,19 @@
     };
     let lanternArrivalTimer = null;
     let defaultSoundStarted = false;
+
+    // [추가] 일반 div로 변경된 커스텀 모달 오버레이를 기존 showModal/close 코드와 에러 없이 호환되도록 수명 메서드 바인딩
+    const patchModal = (el) => {
+      if (!el) return;
+      el.showModal = function() {
+        el.style.display = "grid";
+      };
+      el.close = function() {
+        el.style.display = "none";
+      };
+    };
+    patchModal(wishDialog);
+    patchModal(shareDialog);
 
     Object.values(soundPlayers).forEach((audio) => {
       audio.loop = true;
@@ -1625,6 +1647,7 @@
       phone.classList.add("sounding");
     }
 
+    // 사운드 재생 멈추기
     function stopLoop(type) {
       const audio = soundPlayers[type];
       if (!audio) return;
