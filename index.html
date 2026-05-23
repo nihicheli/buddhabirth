@@ -4,19 +4,23 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>🙏부처님오신날 - 번뇌금지</title>
-  
+
+  <!-- [추가] 브라우저 탭 및 모바일 홈 화면 파비콘 설정 -->
+  <link rel="icon" type="image/jpeg" href="assets/buddhist-logo.png">
+  <link rel="apple-touch-icon" href="assets/buddhist-logo.png">
+
   <!-- [추가] 카카오톡, 페이스북, 라인 등 링크 공유 시 나타나는 사이트 정보 (Open Graph) 메타 태그 -->
   <meta property="og:title" content="🙏부처님오신날 - 번뇌금지">
   <meta property="og:description" content="나만의 소원을 연등에 담아 하늘로 띄우고, 번뇌를 내려놓아 보세요.">
-  <meta property="og:image" content="assets/buddha-front.png"> <!-- 지정해주신 대표 이미지 경로 적용 -->
+  <meta property="og:image" content="assets/realize.jpg"> <!-- 지정해주신 대표 이미지 경로 적용 -->
   <meta property="og:url" content="https://bit.ly/buddha_birth">
   <meta property="og:type" content="website">
 
   <!-- 트위터(X)용 카드 미리보기 메타 태그 -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="🙏부처님오신날 - 번뇌금지">
+  <meta name="twitter:title" content="부처님오신날 - 번뇌금지">
   <meta name="twitter:description" content="나만의 소원을 연등에 담아 하늘로 띄우고, 번뇌를 내려놓아 보세요.">
-  <meta name="twitter:image" content="assets/buddha-front.png">
+  <meta name="twitter:image" content="assets/realize.jpg">
 
   <style>
     @font-face {
@@ -167,13 +171,14 @@
       margin-bottom: 12px;
     }
 
+    /* [수정] "번뇌금지" 서체를 Seokbo(석보체)로 지정하여 전통 미감을 한층 더 끌어올렸습니다. */
     .brand-title .name {
       display: block;
-      font-family: "BuddhaUI", sans-serif;
-      font-size: 56px;
-      font-weight: 950;
+      font-family: "Seokbo", serif;
+      font-size: 52px;
+      font-weight: 400;
       line-height: .96;
-      letter-spacing: -.02em;
+      letter-spacing: 0.02em;
       color: #fff;
       text-shadow:
         0 0 22px rgba(255,255,255,.18),
@@ -718,12 +723,11 @@
       text-shadow: 0 2px 0 rgba(0,0,0,.25);
     }
 
-    /* [개선] 캡처 환경(html2canvas) 및 디바이스 전반에서 완벽하게 상자가 캡처 가로/세로 정중앙에 배치되도록 커스텀 오버레이 모달 구조로 전면 개편합니다. */
     .modal-overlay {
       position: absolute !important;
       inset: 0 !important;
-      background: rgba(0, 0, 0, 0.65) !important; /* 바깥 어두운 배경처리 */
-      display: none; /* 기본 숨김, JS 패치로 켬 */
+      background: rgba(0, 0, 0, 0.65) !important; 
+      display: none; 
       place-items: center !important;
       padding: 24px !important;
       z-index: 9999 !important;
@@ -733,7 +737,7 @@
       width: 100% !important;
       max-width: 320px !important;
       border: 1px solid rgba(255, 255, 255, 0.22) !important;
-      background: #0e0e0d !important; /* 투명도 0% 완벽한 불투명 칠흑색 */
+      background: #0e0e0d !important; 
       color: var(--ink) !important;
       border-radius: 16px !important;
       box-shadow: 0 15px 45px rgba(0, 0, 0, 0.9) !important;
@@ -1035,7 +1039,6 @@
       </div>
     </section>
 
-    <!-- [수정] 좌표 계산 오류를 내던 dialog 엘리먼트를 div 커스텀 정렬 오버레이 구조로 고도화 -->
     <div id="wishDialog" class="modal-overlay">
       <div class="modal-card">
         <div class="modal-body">
@@ -1085,7 +1088,6 @@
       </div>
     </div>
 
-    <!-- [수정] 공유 모달도 동일하게 레이아웃 계산오류 방지를 위해 Div 오버레이 구조로 개선 -->
     <div id="shareDialog" class="modal-overlay" data-html2canvas-ignore>
       <div class="modal-card">
         <div class="modal-body">
@@ -1161,7 +1163,6 @@
     let lanternArrivalTimer = null;
     let defaultSoundStarted = false;
 
-    // [추가] 일반 div로 변경된 커스텀 모달 오버레이를 기존 showModal/close 코드와 에러 없이 호환되도록 수명 메서드 바인딩
     const patchModal = (el) => {
       if (!el) return;
       el.showModal = function() {
