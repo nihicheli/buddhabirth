@@ -1413,8 +1413,9 @@
         .headers({ "x-wish-password": passwordInput });
 
       if (error) {
-        showToast("비밀번호가 일치하지 않습니다.");
-        console.error(error);
+        // 상세 에러 메시지를 토스트와 콘솔에 출력하여 디버깅을 유도합니다.
+        showToast(`삭제 실패: ${error.message || "비밀번호 오류"}`);
+        console.error("Supabase Delete Error:", error);
       } else {
         const idx = wishes.findIndex(w => w.id === targetId || w === activeDialogWish);
         if (idx > -1) wishes.splice(idx, 1);
@@ -1468,8 +1469,9 @@
         .headers({ "x-wish-password": passwordInput });
 
       if (error) {
-        showToast("비밀번호가 일치하지 않거나 수정할 수 없습니다.");
-        console.error(error);
+        // 상세 에러 메시지를 토스트와 콘솔에 출력하여 디버깅을 유도합니다.
+        showToast(`수정 실패: ${error.message || "비밀번호 오류"}`);
+        console.error("Supabase Update Error:", error);
       } else {
         activeDialogWish.text = newText;
         
